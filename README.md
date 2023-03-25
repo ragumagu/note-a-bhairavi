@@ -5,6 +5,8 @@ Use this app to create carnatic music notation.
 
 This app initially focuses on konnakol / mridangam / kanjira / ghatam / morsing notation.
 
+[Click here](https://ragumagu.github.io/carnatic-notation-app/notation_app.html) to open the app.
+
 Support for a few kannada phrases is available. More languages will be added soon!
 
 ## Tutorial:
