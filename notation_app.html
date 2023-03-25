@@ -380,7 +380,7 @@
 
         var notation_script = null;
 
-        fetch("/scripts/notation_core.js")
+        fetch("/carnatic-notation-app/scripts/notation_core.js")
             .then((response) => response.text())
             .then((text) => {
                 return text;
@@ -405,7 +405,7 @@
             });
 
         var book_utils = null;
-        fetch("/scripts/book_utils.js")
+        fetch("/carnatic-notation-app/scripts/book_utils.js")
             .then((response) => response.text())
             .then((text) => {
                 return text;
