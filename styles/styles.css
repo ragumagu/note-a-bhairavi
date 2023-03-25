@@ -1,0 +1,39 @@
+.du {
+    border-bottom: double 3px;
+}
+
+.su {
+    border-bottom: solid 1px;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.hide {
+    visibility: hidden;
+}
+
+.visible {
+    visibility: visible;
+}
+
+#page-numbers-window {
+    display: inline-flex;
+    gap: 4px;
+}
+
+.button-link {
+    color: blue;
+    cursor: pointer;
+    font-size: large;
+    text-decoration: underline;
+}
