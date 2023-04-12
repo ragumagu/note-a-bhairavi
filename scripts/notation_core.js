@@ -1,7 +1,7 @@
 aksharas = {
     "ಕ": 1,
     "ಕಿ": 1,
-    "ಕು ": 1,
+    "ಕು": 1,
     "ಟ": 1,
     "ಗಿ": 1,
     "ಗು": 1,
@@ -126,7 +126,6 @@ function get_row(content) {
     let split = get_chars(content);
     console.log("Split", split);
     let text = "";
-    let text_len = 0;
 
     for (let i = 0; i < split.length; i++) {
         if (split[i] in aksharas) {
@@ -164,7 +163,7 @@ function get_row(content) {
             text = "";
             text_len = 0;
 
-        } else if (["||", "⁋", "¶", "|", "\\"].includes(split[i])) {
+        } else if (["||", "⁋", "¶", "|", "//", "\\"].includes(split[i])) {
             if (!(text === "")) {
                 let span = document.createElement("span");
                 span.innerHTML = text;
@@ -209,6 +208,7 @@ function render_text(text, output_container) {
         buff = lines[i].trim();
 
         while (buff !== "") {
+            console.log("BUFF", buff);
             if (buff === "#TOC") {
                 result.push(generate_table_of_contents());
                 buff = "";
@@ -222,10 +222,16 @@ function render_text(text, output_container) {
                         curr_table.childNodes.forEach((tr) => {
                             curr_table_style['align-right'].forEach((col_num) => {
                                 [...tr.childNodes][col_num].classList.add("text-align-right");
+                                [...[...tr.childNodes][col_num].childNodes].forEach((n)=>{
+                                    n.classList.add("text-align-right");
+                                })
                             });
 
                             curr_table_style['align-center'].forEach((col_num) => {
                                 [...tr.childNodes][col_num].classList.add("text-align-center");
+                                [...[...tr.childNodes][col_num].childNodes].forEach((n)=>{
+                                    n.classList.add("text-align-center");
+                                })
                             });
                         })
                     }
@@ -258,16 +264,17 @@ function render_text(text, output_container) {
 
                 buff = buff.substring(end + 4);
 
-            } else if (buff.startsWith["["] && buff.endsWith("]")) {
-
+            } else if (buff.startsWith("[") && buff.endsWith("]")) {
+                console.log("buff startswith []");
                 let align = get_row(buff.substring(1, buff.length - 1));
                 curr_table_style = {
                     "align-right": [],
                     "align-center": [],
                 }
                 let i = 0;
+                console.log("align", align);
                 align.childNodes.forEach((td) => {
-                    td = td.innerHTML.trim();
+                    td = td.innerText.trim();
                     if (td === "r") {
                         curr_table_style['align-right'].push(i);
                     } else if (td === "c") {
@@ -275,6 +282,8 @@ function render_text(text, output_container) {
                     }
                     i++;
                 });
+
+                console.log("Curr table style", curr_table_style);
 
                 buff = "";
             } else if (buff.startsWith("# ")) {
@@ -298,5 +307,87 @@ function render_text(text, output_container) {
         }
     };
     output_container.replaceChildren(...result);
+}
 
+
+function get_curly_brace() {
+    let border_element = document.createElement("div");
+    children = [];
+    for (let i = 0; i < 6; i++) {
+        let div = document.createElement("div")
+        children.push(div);
+    }
+    children[0].classList.add("curly-brace-left-arc");
+    children[1].classList.add("curly-brace-line");
+    children[2].classList.add("curly-brace-left-arc");
+    children[2].classList.add("curly-brace-invert");
+    children[3].classList.add("curly-brace-right-arc");
+    children[3].classList.add("curly-brace-invert");
+    children[4].classList.add("curly-brace-line");
+    children[5].classList.add("curly-brace-right-arc");
+    border_element.replaceChildren(...children);
+    border_element.classList.add("curly-brace-group");
+    return border_element;
+}
+
+function show_counts() {
+    let nodes = document.querySelectorAll("#output td span");
+    console.log("nodes", nodes);
+
+    for (let i = 0; i < nodes.length; i++) {
+        let text_node = nodes[i];
+        let splits = "";
+        splits = get_chars(text_node.innerText);
+
+        let len = 0;
+        for (let i = 0; i < splits.length; i++) {
+            if (splits[i] in aksharas) {
+                len += aksharas[splits[i]];
+            }
+        }
+
+        if (text_node.classList.contains("su")) {
+            len = len / 2;
+        } else if (text_node.classList.contains("du")) {
+            len = len / 4;
+        }
+
+        if (len === 0){
+            continue;
+        }
+
+        let container = document.createElement("div");
+
+        label = document.createElement("label");
+        label.innerText = len;
+        label.classList.add("text-align-center");
+
+        let brace = get_curly_brace();
+        brace.style.width = `${text_node.getBoundingClientRect().width}px`;
+        label.style.width = `${text_node.getBoundingClientRect().width}px`;
+
+        let children = [label, brace, text_node.cloneNode(true)];
+        container.classList.add('curly-brace-group-container');
+        container.replaceChildren(...children);
+
+        if (text_node.classList.contains("text-align-right")){
+            container.style.alignItems = "end";
+        }
+
+        if (text_node.classList.contains("text-align-center")){
+            container.style.alignItems = "center";
+        }
+
+        text_node.replaceWith(container);
+    }
+}
+
+let show_counts_checkbox = document.getElementById("show-counts-checkbox")
+show_counts_checkbox.onchange = () =>{
+    if (show_counts_checkbox.checked){
+        render_text(book[current_page], document.getElementById("output"));
+        show_counts();
+    }else{
+        render_text(book[current_page], document.getElementById("output"));
+    }
 }

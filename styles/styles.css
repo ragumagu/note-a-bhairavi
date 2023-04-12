@@ -1,3 +1,7 @@
+td {
+    vertical-align: bottom;
+}
+
 .du {
     border-bottom: double 3px;
 }
@@ -15,7 +19,7 @@
 }
 
 .bold {
-    font-weight: bold;
+    font-weight: bolder;
 }
 
 .hide {
@@ -36,4 +40,47 @@
     cursor: pointer;
     font-size: large;
     text-decoration: underline;
+}
+
+/* CSS for horizontal curly brace */
+
+:root {
+    --curly-top-border-radius: 8px;
+}
+
+.curly-brace-group-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.curly-brace-group{
+    display: flex;
+    transform: translateY(var(--curly-top-border-radius));
+}
+
+.curly-brace-left-arc {
+    width: var(--curly-top-border-radius);
+    height: var(--curly-top-border-radius);
+    border-top-left-radius: 200px;
+    border: 1px solid brown;
+    border-right: none;
+    border-bottom: none;
+}
+
+.curly-brace-right-arc {
+    width: var(--curly-top-border-radius);
+    height: var(--curly-top-border-radius);
+    border-top-right-radius: 200px;
+    border: 1px solid brown;
+    border-left: none;
+    border-bottom: none;
+}
+
+.curly-brace-invert {
+    transform: rotate(-180deg) translateY(var(--curly-top-border-radius));
+}
+
+.curly-brace-line {
+    flex: 1;
+    border-top: solid brown 1px;
 }
