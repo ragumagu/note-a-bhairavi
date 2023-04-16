@@ -51,7 +51,6 @@ function get_chars(src) {
 
     let i = 0;
     while (i < src.length) {
-        // console.log('i is', i);
         if (src.substring(i, i + 5) in aksharas) {
             result.push(src.substring(i, i + 5));
             i = i + 5;
@@ -68,11 +67,9 @@ function get_chars(src) {
             alert("Unrecognized character" + src[i] + ",at index:" + i)
             console.log("Unrecognized character:'" + src[i] + "',at index:" + i);
         } else {
-            // console.log("ascii:'" + src[i] + "', at i", i, src.substring(i));
             if (src.substring(i, i + 2) === "((" || src.substring(i, i + 2) === "))" ||
                 src.substring(i, i + 2) === "||") {
                 result.push(src.substring(i, i + 2))
-                    // console.log("pushing" + src.substring(i, i + 2))
                 i = i + 1;
             } else if (src[i] === " ") { // space
                 if (result[result.length - 1] != " ") {
@@ -222,14 +219,14 @@ function render_text(text, output_container) {
                         curr_table.childNodes.forEach((tr) => {
                             curr_table_style['align-right'].forEach((col_num) => {
                                 [...tr.childNodes][col_num].classList.add("text-align-right");
-                                [...[...tr.childNodes][col_num].childNodes].forEach((n)=>{
+                                [...[...tr.childNodes][col_num].childNodes].forEach((n) => {
                                     n.classList.add("text-align-right");
                                 })
                             });
 
                             curr_table_style['align-center'].forEach((col_num) => {
                                 [...tr.childNodes][col_num].classList.add("text-align-center");
-                                [...[...tr.childNodes][col_num].childNodes].forEach((n)=>{
+                                [...[...tr.childNodes][col_num].childNodes].forEach((n) => {
                                     n.classList.add("text-align-center");
                                 })
                             });
@@ -330,12 +327,15 @@ function get_curly_brace() {
     return border_element;
 }
 
-function show_counts() {
-    let nodes = document.querySelectorAll("#output td span");
-    console.log("nodes", nodes);
 
+
+function show_count_hints(page) {
+    let nodes = page.querySelectorAll("span:not(.count-hints-span)");
+
+    console.log("Show counts called.", nodes);
     for (let i = 0; i < nodes.length; i++) {
         let text_node = nodes[i];
+
         let splits = "";
         splits = get_chars(text_node.innerText);
 
@@ -352,7 +352,8 @@ function show_counts() {
             len = len / 4;
         }
 
-        if (len === 0){
+        console.log("Len is ", len);
+        if (len === 0) {
             continue;
         }
 
@@ -366,15 +367,21 @@ function show_counts() {
         brace.style.width = `${text_node.getBoundingClientRect().width}px`;
         label.style.width = `${text_node.getBoundingClientRect().width}px`;
 
-        let children = [label, brace, text_node.cloneNode(true)];
+        label.classList.add("count-hints");
+        brace.classList.add("count-hints-span");
+
+        let span = text_node.cloneNode(true);
+        span.classList.add("count-hints-span");
+
+        let children = [label, brace, span];
         container.classList.add('curly-brace-group-container');
         container.replaceChildren(...children);
 
-        if (text_node.classList.contains("text-align-right")){
+        if (text_node.classList.contains("text-align-right")) {
             container.style.alignItems = "end";
         }
 
-        if (text_node.classList.contains("text-align-center")){
+        if (text_node.classList.contains("text-align-center")) {
             container.style.alignItems = "center";
         }
 
@@ -382,12 +389,52 @@ function show_counts() {
     }
 }
 
-let show_counts_checkbox = document.getElementById("show-counts-checkbox")
-show_counts_checkbox.onchange = () =>{
-    if (show_counts_checkbox.checked){
-        render_text(book[current_page], document.getElementById("output"));
-        show_counts();
-    }else{
-        render_text(book[current_page], document.getElementById("output"));
+function hide_count_hints(page) {
+    page.querySelectorAll(".count-hints").forEach((hint_node) => {
+        hint_node.remove();
+    })
+    page.querySelectorAll(".count-hints-span").forEach((hint_node) => {
+        hint_node.classList.remove('count-hints-span');
+    })
+}
+
+function show_or_hide_count_hints_with_range() {
+    let pages = document.querySelectorAll('.page');
+    range_min = Math.max(0, current_page_in_viewport - 3);
+    range_max = Math.min(pages.length, current_page_in_viewport + 3);
+
+    console.log("pages ", pages, range_min, range_max);
+    for (let i = range_min; i < range_max; i++) {
+        if (show_counts_checkbox.checked) {
+            show_count_hints(pages[i]);
+        } else {
+            console.log("pages [i], ", pages.length, i);
+            hide_count_hints(pages[i]);
+        }
     }
+}
+
+var current_page_in_viewport = 0;
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            let new_val = parseInt(entry.target.id.replace("page-", ""));
+            console.log("new val", new_val);
+            if (Math.abs(current_page_in_viewport - new_val) > 2){
+                current_page_in_viewport = new_val;
+                show_or_hide_count_hints_with_range();
+            }
+            console.log("current_page is", current_page_in_viewport);
+        }
+    })
+});
+
+document.querySelectorAll('.page').forEach((page) => {
+observer.observe(page);
+})
+
+let show_counts_checkbox = document.getElementById("show-counts-checkbox")
+show_counts_checkbox.onchange = () => {
+    show_or_hide_count_hints_with_range();
 }
