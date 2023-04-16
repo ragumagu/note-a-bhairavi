@@ -30,6 +30,16 @@ aksharas = {
     ";": 2
 }
 
+let aksharas_sorted = Object.keys(aksharas);
+let accepted_tokens = [
+    "||", "//", "$#", "##", "#", "*", "\\", "|", "⁋", "¶", "(", "((", ")", "))", ...aksharas_sorted
+];
+accepted_tokens = accepted_tokens.sort((a, b) => { return b.length - a.length });
+
+
+ignore_tokens = [
+    "\n", " "
+]
 
 function isASCII(str) {
     if (str === " ") { // check for &emsp;
@@ -38,81 +48,46 @@ function isASCII(str) {
     return /^[\x00-\x7F]*$/.test(str);
 }
 
-var special_characters = ["⁋", "¶"]
-
 function isDiacritic(str) {
     return /^[\u0C80-\u0CFF]*$/.test(str) && !(/^[\u0C85-\u0CB9]*$/.test(str));
 }
 
-
-
 function get_chars(src) {
     let result = [];
-
     let i = 0;
-    while (i < src.length) {
-        if (src.substring(i, i + 5) in aksharas) {
-            result.push(src.substring(i, i + 5));
-            i = i + 5;
-        } else if (src.substring(i, i + 3) in aksharas) {
-            result.push(src.substring(i, i + 3));
-            i = i + 3;
-        } else if (src.substring(i, i + 2) in aksharas) {
-            result.push(src.substring(i, i + 2));
-            i = i + 2;
-        } else if (src.substring(i, i + 1) in aksharas) {
-            result.push(src.substring(i, i + 1));
-            i = i + 1;
-        } else if (!isASCII(src[i]) && !(special_characters.includes(src[i]))) {
-            alert("Unrecognized character" + src[i] + ",at index:" + i)
-            console.log("Unrecognized character:'" + src[i] + "',at index:" + i);
-        } else {
-            if (src.substring(i, i + 2) === "((" || src.substring(i, i + 2) === "))" ||
-                src.substring(i, i + 2) === "||") {
-                result.push(src.substring(i, i + 2))
-                i = i + 1;
-            } else if (src[i] === " ") { // space
-                if (result[result.length - 1] != " ") {
-                    result.push(src[i]);
-                }
-            } else if (!(src[i] === " " || src[i] === "\n")) { // &emsp; and new line characters
-                // console.log("Pushing ascii:'" + src[i] + "'");
-                result.push(src[i]);
+    while (i < (src.length)) {
+        let done = false;
+        // case 1: src[i] is a recognized token
+        for (let j = 0; j < accepted_tokens.length; j++) {
+            let token = accepted_tokens[j]
+            if (token === src.substring(i, i + token.length)) {
+                result.push(accepted_tokens[j]);
+                i += accepted_tokens[j].length;
+                done = true;
+                break;
             }
-            i = i + 1;
         }
+        if (done) {
+            continue;
+        }
+
+        // case 2: src[i] is ASCII
+        if (isASCII(src[i])) {
+            result.push(src[i]);
+            i += 1;
+            continue;
+        }
+
+        if (ignore_tokens.includes(src[i])) {
+            i += 1;
+            continue;
+        }
+
+        alert("Unrecognized character" + src[i] + ",at index:" + i)
+        console.log("Unrecognized character:'" + src[i] + "', at index:" + i);
     }
 
     return result;
-}
-
-function generate_table_of_contents() {
-    let toc = document.createElement("table");
-    book.forEach((page, idx) => {
-        let link_text = "Page " + (idx + 1) + ": " + page.substring(0, page.indexOf("\n"));
-        let link = document.createElement("a");
-        link.innerText = link_text;
-
-        link.classList.add('button-link');
-
-        link.onclick = (e) => {
-            e.preventDefault();
-            current_page = idx;
-            let text = document.getElementById("text");
-            if (text != null) {
-                text.value = book[current_page];
-            }
-            render_text(book[current_page], document.getElementById("output"));
-            update_page_numbers_window();
-        }
-
-        let row = document.createElement("tr");
-        let td = document.createElement("td");
-        td.appendChild(link);
-        row.appendChild(td);
-        toc.appendChild(row);
-    });
-    return toc;
 }
 
 
@@ -121,55 +96,65 @@ function get_row(content) {
     let td = document.createElement("td");
 
     let split = get_chars(content);
-    console.log("Split", split);
+
     let text = "";
 
     for (let i = 0; i < split.length; i++) {
-        if (split[i] in aksharas) {
-            text += split[i];
-            text_len += aksharas[split[i]];
 
-        } else if (split[i] === "(" || split[i] === "((") {
+        if (split[i] === "(" || split[i] === "((") {
             if (text != "") {
                 let span = document.createElement("span");
                 span.innerHTML = text;
-                td.appendChild(span);
+                let div = document.createElement("div");
+                div.appendChild(span);
+                div.classList.add("count-hints-container")
+                td.appendChild(div);
             }
-
             text = "";
-            text_len = 0;
 
         } else if (split[i] === ")") {
             if (text != "") {
                 let span = document.createElement("span");
                 span.innerHTML = text;
                 span.classList.add("su");
-                td.appendChild(span);
+
+                let div = document.createElement("div");
+                div.appendChild(span);
+                div.classList.add("count-hints-container")
+                td.appendChild(div);
+
             }
 
             text = "";
-            text_len = 0;
 
         } else if (split[i] === "))") {
             if (text != "") {
                 let span = document.createElement("span");
                 span.innerHTML = text;
                 span.classList.add("du");
-                td.appendChild(span);
+
+                let div = document.createElement("div");
+                div.appendChild(span);
+                div.classList.add("count-hints-container")
+                td.appendChild(div);
+
             }
             text = "";
-            text_len = 0;
 
         } else if (["||", "⁋", "¶", "|", "//", "\\"].includes(split[i])) {
             if (!(text === "")) {
                 let span = document.createElement("span");
                 span.innerHTML = text;
-                td.appendChild(span);
+
+                let div = document.createElement("div");
+                div.appendChild(span);
+                div.classList.add("count-hints-container")
+                td.appendChild(div);
+
                 row.append(td);
             }
 
             text = "";
-            text_len = 0;
 
             if (split[i] !== "\\") {
                 td = document.createElement("td");
@@ -180,61 +165,124 @@ function get_row(content) {
             td = document.createElement("td");
 
         } else if (split[i] === " ") {
-            console.log("text is space");
             text += split[i];
         } else {
             text += split[i];
-            text_len += 1;
         }
-        console.log('text is:"' + text + '"');
     }
 
     return row;
+}
+
+
+function get_header() {
+    let header = document.createElement("header");
+    header.classList.add('nav-header');
+
+    let div = document.createElement("div");
+    let anchor = document.createElement("a");
+    anchor.href = "#table-of-contents";
+    anchor.innerText = "Contents";
+    div.appendChild(anchor);
+    header.appendChild(div);
+
+    div = document.createElement("div");
+    let span = document.createElement("span");
+    span.id = "current-chapter-title";
+    span.innerText = "Current chapter";
+    div.appendChild(span);
+    header.appendChild(div);
+
+    div = document.createElement("div");
+    let label = document.createElement("label");
+    label.innerText = "Show syllable counts:";
+    div.appendChild(label);
+
+    let input = document.createElement("input");
+    input.type = "checkbox";
+    input.id = "show-counts-checkbox";
+    input.onchange = show_or_hide_count_hints_with_range;
+
+    div.appendChild(input);
+    header.appendChild(div);
+
+    return header;
+
 }
 
 function render_text(text, output_container) {
     let lines = text.split("\n");
     let buff = "";
 
-    let curr_table = null;
-    let curr_table_style = null;
-    let result = [];
-    let new_table = false;
+    let pages = [];
+    let page = [];
+    let ids = [];
+
+    let paragraph = document.createElement("p");
+
+    let table = null;
+    let table_style = null;
+
+    let titles = [];
 
     for (let i = 0; i < lines.length; i++) {
         buff = lines[i].trim();
+        buff = buff.replace(/  +/g, ' ');
 
         while (buff !== "") {
-            console.log("BUFF", buff);
-            if (buff === "#TOC") {
-                result.push(generate_table_of_contents());
-                buff = "";
-            } else if (buff[0] === "*") {
-                if (curr_table === null) {
-                    new_table = true;
-                } else {
-                    // Add styles to current table and push to result
+            if (buff.startsWith("$# ")) {
+                if (page.length != 0) {
+                    page_element = document.createElement("div");
+                    page_element.classList.add('page');
+                    page_element.replaceChildren(...page);
+                    let id = "page-id-" + ids.length;
+                    page_element.id = id;
+                    ids.push(id);
+                    pages.push(page_element);
 
-                    if (curr_table_style !== null) {
-                        curr_table.childNodes.forEach((tr) => {
-                            curr_table_style['align-right'].forEach((col_num) => {
+                    page = [];
+                }
+
+                let h1 = document.createElement("h1");
+                h1.innerHTML = buff.substring(3);
+                titles.push(buff.substring(3));
+                page.push(h1);
+                buff = "";
+
+            } else if (buff.startsWith("# ")) {
+                // add h1
+                let h1 = document.createElement("h1");
+                h1.innerHTML = buff.substring(2);
+                page.push(h1);
+                buff = "";
+
+            } else if (buff.startsWith("## ")) {
+                // add h2
+                let h2 = document.createElement("h2");
+                h2.innerHTML = buff.substring(3);
+                page.push(h2);
+                buff = "";
+
+            } else if (buff[0] === "*") {
+                if (table === null) {
+                    table = document.createElement("table");
+                    console.log("creating new table", table);
+                } else {
+
+                    if (table_style !== null) {
+                        table.childNodes.forEach((tr) => {
+                            table_style['align-right'].forEach((col_num) => {
                                 [...tr.childNodes][col_num].classList.add("text-align-right");
-                                [...[...tr.childNodes][col_num].childNodes].forEach((n) => {
-                                    n.classList.add("text-align-right");
-                                })
                             });
 
-                            curr_table_style['align-center'].forEach((col_num) => {
+                            table_style['align-center'].forEach((col_num) => {
                                 [...tr.childNodes][col_num].classList.add("text-align-center");
-                                [...[...tr.childNodes][col_num].childNodes].forEach((n) => {
-                                    n.classList.add("text-align-center");
-                                })
                             });
                         })
                     }
-                    result.push(curr_table);
-                    curr_table = null;
-                    curr_table_style = null;
+                    page.push(table);
+                    buff = buff.substring(1);
+                    table = null;
                 }
                 buff = buff.substring(1);
             } else if (buff.startsWith("||") | buff.startsWith("//")) {
@@ -245,65 +293,81 @@ function render_text(text, output_container) {
                     markers = ["⁋", "¶"]
                 }
 
-                if (new_table) {
-                    curr_table = document.createElement("table");
-                    new_table = false;
-                }
-
                 end = buff.substring(2).indexOf(match_string);
                 if (end < 0) {
                     throw new Error('Unmatched ' + match_string +
                         " on line number " + i + ", line:" + lines[i]);
                 }
 
-                curr_table.appendChild(get_row(markers[0] +
+                table.appendChild(get_row(markers[0] +
                     buff.substring(2, end + 2) + markers[1]));
 
                 buff = buff.substring(end + 4);
 
             } else if (buff.startsWith("[") && buff.endsWith("]")) {
-                console.log("buff startswith []");
+
                 let align = get_row(buff.substring(1, buff.length - 1));
-                curr_table_style = {
+                table_style = {
                     "align-right": [],
                     "align-center": [],
                 }
                 let i = 0;
-                console.log("align", align);
                 align.childNodes.forEach((td) => {
                     td = td.innerText.trim();
                     if (td === "r") {
-                        curr_table_style['align-right'].push(i);
+                        table_style['align-right'].push(i);
                     } else if (td === "c") {
-                        curr_table_style['align-center'].push(i);
+                        table_style['align-center'].push(i);
                     }
                     i++;
                 });
-
-                console.log("Curr table style", curr_table_style);
-
-                buff = "";
-            } else if (buff.startsWith("# ")) {
-                // add h1
-                let h1 = document.createElement("h1");
-                h1.innerHTML = buff.substring(2);
-                result.push(h1);
-                buff = "";
-            } else if (buff.startsWith("## ")) {
-                // add h2
-                let h2 = document.createElement("h2");
-                h2.innerHTML = buff.substring(3);
-                result.push(h2);
                 buff = "";
             } else {
-                let p = document.createElement("p");
-                p.innerHTML = buff;
-                result.push(p);
+                if (buff.endsWith("+")){
+                    paragraph.innerHTML += " " + buff.substring(0, buff.length-1);
+                }else{
+                    paragraph.innerHTML += " " + buff;
+
+                    page.push(paragraph);
+                    paragraph = document.createElement("p");
+                }
                 buff = "";
             }
         }
-    };
-    output_container.replaceChildren(...result);
+    }
+
+    if (page != []) {
+        page_element = document.createElement("div");
+        page_element.classList.add('page');
+        page_element.replaceChildren(...page);
+
+        let id = "page-id-" + ids.length;
+        page_element.id = id;
+        ids.push(id);
+
+        pages.push(page_element);
+    }
+
+
+    let toc = document.createElement("div");
+    let list = document.createElement("ul");
+
+    for (let i = 0; i < titles.length; i++) {
+        let list_entry = document.createElement("li");
+        let anchor = document.createElement("a");
+        anchor.href = "#" + ids[i];
+        anchor.innerText = titles[i];
+        list_entry.appendChild(anchor);
+        list.appendChild(list_entry);
+    }
+    toc.appendChild(list);
+    toc.classList.add("page");
+    toc.classList.add("toc");
+    toc.classList.add("page-first");
+    toc.id = "table-of-contents";
+
+
+    output_container.replaceChildren(...[get_header(), toc, ...pages]);
 }
 
 
@@ -328,13 +392,12 @@ function get_curly_brace() {
 }
 
 
-
 function show_count_hints(page) {
-    let nodes = page.querySelectorAll("span:not(.count-hints-span)");
+    let nodes = page.querySelectorAll(".count-hints-container");
 
-    console.log("Show counts called.", nodes);
     for (let i = 0; i < nodes.length; i++) {
-        let text_node = nodes[i];
+        let container = nodes[i];
+        let text_node = container.querySelector("span");
 
         let splits = "";
         splits = get_chars(text_node.innerText);
@@ -352,12 +415,9 @@ function show_count_hints(page) {
             len = len / 4;
         }
 
-        console.log("Len is ", len);
         if (len === 0) {
             continue;
         }
-
-        let container = document.createElement("div");
 
         label = document.createElement("label");
         label.innerText = len;
@@ -367,15 +427,11 @@ function show_count_hints(page) {
         brace.style.width = `${text_node.getBoundingClientRect().width}px`;
         label.style.width = `${text_node.getBoundingClientRect().width}px`;
 
-        label.classList.add("count-hints");
-        brace.classList.add("count-hints-span");
+        label.classList.add("count-hints-label");
+        brace.classList.add("count-hints-brace");
 
-        let span = text_node.cloneNode(true);
-        span.classList.add("count-hints-span");
-
-        let children = [label, brace, span];
-        container.classList.add('curly-brace-group-container');
-        container.replaceChildren(...children);
+        container.insertBefore(label, text_node);
+        container.insertBefore(brace, text_node);
 
         if (text_node.classList.contains("text-align-right")) {
             container.style.alignItems = "end";
@@ -385,25 +441,34 @@ function show_count_hints(page) {
             container.style.alignItems = "center";
         }
 
-        text_node.replaceWith(container);
     }
 }
 
+
 function hide_count_hints(page) {
-    page.querySelectorAll(".count-hints").forEach((hint_node) => {
+    page.querySelectorAll(".count-hints-label").forEach((hint_node) => {
         hint_node.remove();
     })
-    page.querySelectorAll(".count-hints-span").forEach((hint_node) => {
-        hint_node.classList.remove('count-hints-span');
+    page.querySelectorAll(".count-hints-brace").forEach((hint_node) => {
+        hint_node.remove();
     })
 }
 
 function show_or_hide_count_hints_with_range() {
-    let pages = document.querySelectorAll('.page');
+    let pages = [...document.getElementsByClassName('page')];
+    for (let i = 0; i < pages.length; i++) {
+        console.log(pages[i], pages[i].classList.contains("toc"));
+        if (pages[i].classList.contains("toc")) {
+            pages.splice(i, 1);
+            break;
+        }
+    }
+
     range_min = Math.max(0, current_page_in_viewport - 3);
     range_max = Math.min(pages.length, current_page_in_viewport + 3);
 
-    console.log("pages ", pages, range_min, range_max);
+    let show_counts_checkbox = document.getElementById("show-counts-checkbox");
+    console.log("show or hide called", range_min, range_max, pages);
     for (let i = range_min; i < range_max; i++) {
         if (show_counts_checkbox.checked) {
             show_count_hints(pages[i]);
@@ -421,7 +486,7 @@ const observer = new IntersectionObserver((entries) => {
         if (entry.isIntersecting) {
             let new_val = parseInt(entry.target.id.replace("page-", ""));
             console.log("new val", new_val);
-            if (Math.abs(current_page_in_viewport - new_val) > 2){
+            if (Math.abs(current_page_in_viewport - new_val) > 2) {
                 current_page_in_viewport = new_val;
                 show_or_hide_count_hints_with_range();
             }
@@ -431,10 +496,5 @@ const observer = new IntersectionObserver((entries) => {
 });
 
 document.querySelectorAll('.page').forEach((page) => {
-observer.observe(page);
+    observer.observe(page);
 })
-
-let show_counts_checkbox = document.getElementById("show-counts-checkbox")
-show_counts_checkbox.onchange = () => {
-    show_or_hide_count_hints_with_range();
-}

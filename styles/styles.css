@@ -42,18 +42,23 @@ td {
     text-decoration: underline;
 }
 
+
 /* CSS for horizontal curly brace */
 
 :root {
     --curly-top-border-radius: 8px;
 }
 
-.curly-brace-group-container {
-    display: flex;
+.count-hints-container {
+    display: inline-flex;
     flex-direction: column;
 }
 
-.curly-brace-group{
+.count-hints-container span{
+    flex-basis: 0;
+}
+
+.curly-brace-group {
     display: flex;
     transform: translateY(var(--curly-top-border-radius));
 }
@@ -83,4 +88,39 @@ td {
 .curly-brace-line {
     flex: 1;
     border-top: solid brown 1px;
+}
+
+.output-container {
+    background-color: rgb(125, 88, 88);
+    background-image: repeating-linear-gradient(-45deg, transparent, transparent 14px, rgb(169, 134, 134) 14px, rgb(169, 134, 134) 18px);
+    background-attachment: fixed;
+}
+
+.nav-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: white;
+    width: 100%;
+    padding: 1rem;
+    background: #111;
+}
+
+.nav-header * {
+    color: white;
+}
+
+.page {
+    scroll-margin-top: 4rem;
+    border: solid black 1px;
+    background-color: #fffff8;
+    margin-top: 1rem;
+    padding: 2rem;
+}
+
+.page-first {
+    margin-top: 4rem;
 }

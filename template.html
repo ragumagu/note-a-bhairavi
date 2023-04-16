@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <link rel="stylesheet" href="/carnatic-notation-app/styles/styles.css">
+    <style>
+        body {
+            background-color: rgb(125, 88, 88);
+            background-image: repeating-linear-gradient(-45deg, transparent, transparent 14px, rgb(169, 134, 134) 14px, rgb(169, 134, 134) 18px);
+            background-attachment: fixed;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <main>
+    </main>
+    <script src="scripts/notation_core.js"></script>
+
+    <script>
+        let params = (new URL(document.location)).searchParams;
+        let input = params.get("input");
+        render_text(input, document.querySelector("main"));
+
+    </script>
+
+</body>
+
+</html>
