@@ -3,26 +3,29 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <link rel="stylesheet" href="/carnatic-notation-app/styles/styles.css">
-    <style>
-        body {
-            background-color: rgb(125, 88, 88);
-            background-image: repeating-linear-gradient(-45deg, transparent, transparent 14px, rgb(169, 134, 134) 14px, rgb(169, 134, 134) 18px);
-            background-attachment: fixed;
-        }
-        
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" href="/carnatic-notation-app/styles/styles.css"> -->
+    <style></style>
 </head>
 
-<body>
+<body class="output-container">
     <main>
     </main>
-    <script src="scripts/notation_core.js"></script>
+    <!-- <script src="/carnatic-notation-app/scripts/notation_core.js"></script> -->
+    <script id="notation_core"></script>
+    <script id="input" type="text/template"></script>
 
     <script>
         let params = (new URL(document.location)).searchParams;
         let input = params.get("input");
-        render_text(input, document.querySelector("main"));
+        if (input) {
+            render_text(input, document.querySelector("main"));
+        }
+
+        input = document.getElementById("input");
+        if (input.innerHTML){
+            render_text(input.innerHTML, document.querySelector("main"));
+        }
 
     </script>
 

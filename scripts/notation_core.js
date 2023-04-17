@@ -7,6 +7,7 @@ aksharas = {
     "ಗು": 1,
     "ಗುಂ": 1,
     "ಝ": 1,
+    "ಝಂ": 1,
     "ತ": 1,
     "ರಿ": 1,
     "ತ್": 0,
@@ -323,9 +324,9 @@ function render_text(text, output_container) {
                 });
                 buff = "";
             } else {
-                if (buff.endsWith("+")){
-                    paragraph.innerHTML += " " + buff.substring(0, buff.length-1);
-                }else{
+                if (buff.endsWith("+")) {
+                    paragraph.innerHTML += " " + buff.substring(0, buff.length - 1);
+                } else {
                     paragraph.innerHTML += " " + buff;
 
                     page.push(paragraph);
@@ -368,6 +369,11 @@ function render_text(text, output_container) {
 
 
     output_container.replaceChildren(...[get_header(), toc, ...pages]);
+
+
+    document.querySelectorAll('.page').forEach((page) => {
+        observer.observe(page);
+    })
 }
 
 
@@ -397,6 +403,9 @@ function show_count_hints(page) {
 
     for (let i = 0; i < nodes.length; i++) {
         let container = nodes[i];
+        if (container.querySelector(".count-hints-label")){
+            continue;
+        }
         let text_node = container.querySelector("span");
 
         let splits = "";
@@ -424,8 +433,9 @@ function show_count_hints(page) {
         label.classList.add("text-align-center");
 
         let brace = get_curly_brace();
-        brace.style.width = `${text_node.getBoundingClientRect().width}px`;
-        label.style.width = `${text_node.getBoundingClientRect().width}px`;
+        let width = text_node.getBoundingClientRect().width;
+        brace.style.width = `${width}px`;
+        label.style.width = `${width}px`;
 
         label.classList.add("count-hints-label");
         brace.classList.add("count-hints-brace");
@@ -457,7 +467,6 @@ function hide_count_hints(page) {
 function show_or_hide_count_hints_with_range() {
     let pages = [...document.getElementsByClassName('page')];
     for (let i = 0; i < pages.length; i++) {
-        console.log(pages[i], pages[i].classList.contains("toc"));
         if (pages[i].classList.contains("toc")) {
             pages.splice(i, 1);
             break;
@@ -468,12 +477,10 @@ function show_or_hide_count_hints_with_range() {
     range_max = Math.min(pages.length, current_page_in_viewport + 3);
 
     let show_counts_checkbox = document.getElementById("show-counts-checkbox");
-    console.log("show or hide called", range_min, range_max, pages);
     for (let i = range_min; i < range_max; i++) {
         if (show_counts_checkbox.checked) {
             show_count_hints(pages[i]);
         } else {
-            console.log("pages [i], ", pages.length, i);
             hide_count_hints(pages[i]);
         }
     }
@@ -484,17 +491,16 @@ var current_page_in_viewport = 0;
 const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
-            let new_val = parseInt(entry.target.id.replace("page-", ""));
-            console.log("new val", new_val);
-            if (Math.abs(current_page_in_viewport - new_val) > 2) {
-                current_page_in_viewport = new_val;
-                show_or_hide_count_hints_with_range();
+            let new_val = parseInt(entry.target.id.replace("page-id-", ""));
+
+            console.log("current_page is", current_page_in_viewport, new_val, entry.target);
+
+            current_page_in_viewport = new_val;
+            show_or_hide_count_hints_with_range();
+
+            if (!entry.target.classList.contains("toc")) {
+                document.getElementById("current-chapter-title").innerText = entry.target.children[0].innerHTML;
             }
-            console.log("current_page is", current_page_in_viewport);
         }
     })
 });
-
-document.querySelectorAll('.page').forEach((page) => {
-    observer.observe(page);
-})

@@ -1,3 +1,12 @@
+html {
+    box-sizing: border-box;
+}
+
+* {
+    box-sizing: inherit;
+    font-family: 'Times New Roman', Times, serif;
+}
+
 td {
     vertical-align: bottom;
 }
@@ -54,7 +63,7 @@ td {
     flex-direction: column;
 }
 
-.count-hints-container span{
+.count-hints-container span {
     flex-basis: 0;
 }
 
@@ -66,7 +75,7 @@ td {
 .curly-brace-left-arc {
     width: var(--curly-top-border-radius);
     height: var(--curly-top-border-radius);
-    border-top-left-radius: 200px;
+    border-top-left-radius: var(--curly-top-border-radius);
     border: 1px solid brown;
     border-right: none;
     border-bottom: none;
@@ -75,14 +84,14 @@ td {
 .curly-brace-right-arc {
     width: var(--curly-top-border-radius);
     height: var(--curly-top-border-radius);
-    border-top-right-radius: 200px;
+    border-top-right-radius: var(--curly-top-border-radius);
     border: 1px solid brown;
     border-left: none;
     border-bottom: none;
 }
 
 .curly-brace-invert {
-    transform: rotate(-180deg) translateY(var(--curly-top-border-radius));
+    transform: rotate(-180deg) translateY(calc(var(--curly-top-border-radius) - 1px));
 }
 
 .curly-brace-line {
@@ -107,6 +116,7 @@ td {
     width: 100%;
     padding: 1rem;
     background: #111;
+    z-index: 1;
 }
 
 .nav-header * {
