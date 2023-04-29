@@ -4,7 +4,7 @@ html {
 
 * {
     box-sizing: inherit;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: sans-serif;
 }
 
 td {
@@ -133,4 +133,9 @@ td {
 
 .page-first {
     margin-top: 4rem;
+}
+
+main {
+    max-height: 100vh;
+    overflow-y: scroll;
 }

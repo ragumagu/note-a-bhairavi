@@ -31,6 +31,38 @@ aksharas = {
     ";": 2
 }
 
+let kannada_to_english = {
+    "ಕ": "ka",
+    "ಕಿ": "ki",
+    "ಕು": "ku",
+    "ಟ": "Ta",
+    "ಗಿ": "gi",
+    "ಗು": "gu",
+    "ಗುಂ": "gum",
+    "ಝ": "jha",
+    "ಝಂ": "jham",
+    "ತ": "ta",
+    "ರಿ": "ri",
+    "ತ್": "th",
+    "ತಾ": "taa",
+    "ತಾಂ": "taam",
+    "ತ್ಲಾಂ": "tlaam",
+    "ತೊ": "tho",
+    "ತೊಂ": "thom",
+    "ದಿ": "di",
+    "ಧಿ": "dhi",
+    "ಧಿಂ": "dhim",
+    "ಧುಂ": "dhum",
+    "ನ": "na",
+    "ನ್ನ": "nna",
+    "ನಂ": "man",
+    "ಮಿ": "mi",
+    "ಣ": "Na",
+    "ಣು": "Nu",
+    "ಳಾಂ": "Lam",
+    ",": ",",
+    ";": ";"
+}
 let aksharas_sorted = Object.keys(aksharas);
 let accepted_tokens = [
     "||", "//", "$#", "##", "#", "*", "\\", "|", "⁋", "¶", "(", "((", ")", "))", ...aksharas_sorted
@@ -246,6 +278,7 @@ function render_text(text, output_container) {
 
                 let h1 = document.createElement("h1");
                 h1.innerHTML = buff.substring(3);
+                h1.classList.add("page-title");
                 titles.push(buff.substring(3));
                 page.push(h1);
                 buff = "";
@@ -368,10 +401,20 @@ function render_text(text, output_container) {
     toc.id = "table-of-contents";
 
 
-    output_container.replaceChildren(...[get_header(), toc, ...pages]);
+    let header = get_header()
+    output_container.replaceChildren(...[header, toc, ...pages]);
+    let header_height = Math.round(header.getBoundingClientRect().height);
+    let root_margin =header_height + "px 0px 0px 0px" 
+    console.log("root margin", root_margin);
 
+    let options = {
+        root: output_container,
+        rootMargin: root_margin,
+        threshold: 1.0,
+    }
+    const observer = new IntersectionObserver(change_title_on_scroll, options);
 
-    document.querySelectorAll('.page').forEach((page) => {
+    document.querySelectorAll('.page-title').forEach((page) => {
         observer.observe(page);
     })
 }
@@ -403,7 +446,7 @@ function show_count_hints(page) {
 
     for (let i = 0; i < nodes.length; i++) {
         let container = nodes[i];
-        if (container.querySelector(".count-hints-label")){
+        if (container.querySelector(".count-hints-label")) {
             continue;
         }
         let text_node = container.querySelector("span");
@@ -488,19 +531,44 @@ function show_or_hide_count_hints_with_range() {
 
 var current_page_in_viewport = 0;
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-            let new_val = parseInt(entry.target.id.replace("page-id-", ""));
 
-            console.log("current_page is", current_page_in_viewport, new_val, entry.target);
+function change_title_on_scroll(entries){
+    let any_visible = false;
+    console.log("Current page is", current_page_in_viewport);
+
+    for (let i = 0; i<entries.length; i++){
+        if (entries[i].isIntersecting){
+            any_visible = true;
+            break;
+        }
+    }
+
+    entries.forEach((entry) => {
+
+        console.log("Entry",entry.target.innerHTML, entry.boundingClientRect, entry.isIntersecting)
+
+        if ((entry.boundingClientRect.top > 100) && (entry.isIntersecting) ){
+
+            let new_val = parseInt(entry.target.parentNode.id.replace("page-id-", ""));
+            current_page_in_viewport = new_val;
+            show_or_hide_count_hints_with_range();
+
+            if (!entry.target.parentNode.classList.contains("toc")) {
+                document.getElementById("current-chapter-title").innerText = entry.target.innerHTML;
+            }
+
+        } else if ((entry.boundingClientRect.top > 100) && (!(entry.isIntersecting)) && (!any_visible)) {
+            let new_val = parseInt(entry.target.parentNode.id.replace("page-id-", "")) - 1;
+            if (new_val < 0){
+                new_val = 0;
+            }
 
             current_page_in_viewport = new_val;
             show_or_hide_count_hints_with_range();
 
-            if (!entry.target.classList.contains("toc")) {
-                document.getElementById("current-chapter-title").innerText = entry.target.children[0].innerHTML;
+            if (!entry.target.parentNode.classList.contains("toc")) {
+                document.getElementById("current-chapter-title").innerText = document.getElementById("page-id-"+new_val).childNodes[0].innerHTML;
             }
         }
     })
-});
+}
