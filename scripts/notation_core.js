@@ -547,8 +547,9 @@ function change_title_on_scroll(entries){
 
         console.log("Entry",entry.target.innerHTML, entry.boundingClientRect, entry.isIntersecting)
 
+        // Adapted from https://stackoverflow.com/a/63820023
         if ((entry.boundingClientRect.top > 100) && (entry.isIntersecting) ){
-
+            // Title is entering from bottom of viewport
             let new_val = parseInt(entry.target.parentNode.id.replace("page-id-", ""));
             current_page_in_viewport = new_val;
             show_or_hide_count_hints_with_range();
@@ -558,6 +559,7 @@ function change_title_on_scroll(entries){
             }
 
         } else if ((entry.boundingClientRect.top > 100) && (!(entry.isIntersecting)) && (!any_visible)) {
+            // Title is exiting from bottom of viewport
             let new_val = parseInt(entry.target.parentNode.id.replace("page-id-", "")) - 1;
             if (new_val < 0){
                 new_val = 0;
