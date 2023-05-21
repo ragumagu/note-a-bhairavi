@@ -177,7 +177,7 @@ function _process_letter_group(tokens, startIndex, line) {
                     let sub = document.createElement("span");
                     sub.innerText = tokens[idx + 2].trim();
                     sub.classList.add("subscript");
-                    span.appendChild(out);
+                    span.appendChild(sub);
 
                     out.appendChild(span);
                     idx += 3;
