@@ -1,0 +1,39 @@
+.page {
+    border: solid black 1px;
+    background-color: #fffff8;
+    margin-top: 1rem;
+    padding: 2rem;
+    margin-left: 20px;
+    margin-right: 20px;
+    overflow-x: scroll;
+}
+
+.row {
+    display: table-row;
+}
+
+.row > * {
+    white-space: nowrap;
+    display: table-cell;
+    padding-right: 8px;
+    vertical-align: bottom;
+}
+
+/* For the pilcrow */
+.end-row-marker {
+    transform: scale(-1, 1);
+}
+
+.subscript {
+    position: relative;
+    bottom: -0.5em;
+    font-size: 80%;
+}
+
+.du {
+    border-bottom: double 3px;
+}
+
+.su {
+    border-bottom: solid 1px;
+}

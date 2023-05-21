@@ -1,0 +1,95 @@
+.row-marker {
+    background-color: grey;
+}
+
+.row-marker:hover {
+    cursor: pointer;
+}
+
+.row-marked-for-alignment > .row-marker {
+    background-color: green;
+}
+
+.start-row-marker {
+    padding-right: 8px;
+    padding-left: 4px;
+}
+
+.end-row-marker {
+    padding-left: 8px;
+    padding-right: 4px;
+
+    /* For the pilcrow */
+    transform: scale(-1, 1);
+}
+
+.letter:hover {
+    background-color: lightgreen;
+    cursor: pointer;
+}
+
+.separator {
+    color: gray;
+    display: inline-block;
+    min-width: 10px;
+    text-align: center;
+}
+
+.row-marked-for-alignment > .separator:hover {
+    background-color: red;
+}
+
+.separator + .letter {
+    background-color: lightgreen;
+}
+
+.letter-group {
+    white-space: nowrap;
+    margin-right: 2px;
+}
+
+html,
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+    height: 100%;
+    gap: 10px;
+}
+
+main {
+    flex: 1 1 auto;
+    align-self: center;
+    overflow: scroll;
+    padding: 4px;
+    border: 2px solid black;
+    background-color: var(--body-background-color);
+}
+
+#aksharas_table {
+    align-self: center;
+    max-width: min-content;
+    border: 1px solid black;
+    border-collapse: collapse;
+    font-size: xx-small;
+    background-color: var(--body-background-color);
+}
+
+#aksharas_table td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+#aksharas_table td > button {
+    background-color: var(--background-color);
+    border: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+#aksharas_table td > button:hover {
+    background-color: #dfdfdf;
+}

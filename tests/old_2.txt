@@ -1,0 +1,28 @@
+$# Tables
+
+This is how you can format tables.
+
+Tables start and end with an asterisk (*).
+
+|| ತಕದಿಮಿ ತಕಝಣು ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು ||
+|| ತಕದಿಮಿ ತಕಝಣು ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು | (ತ,ದಿ, ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ) ||
+
+You can align left, right or center. 
+For this, copy the first row and put [r], [c] in each cell where
+you want to align right and center respectively. Alignment is to left by default. 
+
+|| ತಕದಿಮಿ ತಕಝಣು / ತಕದಿಮಿ ತಕಝಣು  | [c] | [r] ||
+|| ತಕದಿಮಿ ತಕಝಣು / ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು ||
+|| ತಕದಿಮಿ ತಕಝಣು / (ತ,; ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ) | (ತ,ದಿ, ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ) | (ತಕ ದಿ, ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ) ||
+
+You can also make another type of table: grouping syllables by using //.
+// [r] //
+// ತ, ಧಿಂ,; //
+// ತಕ ಧಿಂ,, //
+// ತಕಿಟ ಧಿಂ,, //
+// ತದಿಗಿಣತೊಂ //
+// ತದಿಗಿಣತೊಂ //
+// ತದಿಗಿಣತೊಂ //
+
+This will be rendered in the output with a pilcrow.
+Use this to distinguish nadai and korvai.

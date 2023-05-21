@@ -1,124 +1,90 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <link rel="stylesheet" href="/carnatic-notation-app/styles/styles.css">
-    <style>
-         :root {
-            --background-color: #fffff8;
-            --text-color: #111;
-            --image-filter: none;
-        }
-        
-        body {
-            background-color: var(--background-color);
-            color: var(--text-color);
-        }
-        
-        table,
-        tr,
-        td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-
-        td pre {
-            max-width: 600px;
-            overflow-x: scroll;
-        }
-    </style>
-</head>
-
-<body>
-    <table id="tests">
-        <tr>
-            <td class="input">
-                <pre>
-$# Main title
-This is a main level heading, and indicates a new page.
-# Heading
-This is a heading... A page can have multiple headings of this kind.
-## Sub-Heading
-This is a sub-heading. A page can have multiple sub-headings too.
-
-Lines typed without any reserved tokens are displayed as paragraphs.
-
-Here is some more content.+
-Here is some more content.+
-Here is some more content.+
-Here is some more content.
-
-If you end a line with a +, then the next line will be added to the same paragraph.
-
-
-$# Main title 2 - second page
-
-This is another page.
-                </pre>
-            </td>
-            <td class="output"></td>
-        </tr>
-        <tr>
-            <td class="input">
-                <pre>
-$# Tables
-
-This is how you can format tables.
-
-Tables start and end with an asterisk (*).
-
-*|| ತಕದಿಮಿ ತಕಝಣು ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು ||
-|| ತಕದಿಮಿ ತಕಝಣು ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು | (ತ,ದಿ, ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ) ||*
-
-You can align right or center. 
-For this, copy the first row and put it in square [] brackets. 
-Then, replace the content by r or c to align accordingly. 
-Also, you can use \ to put an invisible column separator.
-
-[|| ತಕದಿಮಿ ತಕಝಣು \ ತಕದಿಮಿ ತಕಝಣು  | c | r ||]
-*|| ತಕದಿಮಿ ತಕಝಣು \ ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು ||
-|| ತಕದಿಮಿ ತಕಝಣು \ (ತ,; ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ) | (ತ,ದಿ, ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ) | (ತಕ ದಿ, ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ) ||*
-
-You can also make another type of table: grouping syllables by using //.
-[// r //]
-*// ತ, ಧಿಂ,; //
-// ತಕ ಧಿಂ,, //
-// ತಕಿಟ ಧಿಂ,, //
-// ತದಿಗಿಣತೊಂ //
-// ತದಿಗಿಣತೊಂ //
-// ತದಿಗಿಣತೊಂ //*
-
-This will be rendered in the output with a pilcrow.
-Use this to distinguish nadai and korvai.
-                </pre>
-            </td>
-            <td class="output"></td>
-        </tr>
-    </table>
-
-    <script src="scripts/notation_core.js"></script>
-
-    <script>
-        tests_table = document.getElementById("tests");
-        inputs = tests_table.querySelectorAll(".input");
-        outputs = tests_table.querySelectorAll(".output");
-        for (let i = 0; i < inputs.length; i++) {
-            console.log(inputs[i]);
-            let anchor = document.createElement("a");
-            anchor.target = "_blank";
-            let params = {
-                "input": inputs[i].children[0].innerHTML
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+        <link
+            rel="stylesheet"
+            href="/carnatic-notation-app/styles/styles.css"
+        />
+        <style>
+            :root {
+                --background-color: #fffff8;
+                --text-color: #111;
+                --image-filter: none;
             }
-            params = new URLSearchParams(params).toString();
-            console.log("Params", params);
 
-            anchor.href = "/carnatic-notation-app/template.html?" + params;
-            anchor.innerText = "Click to view output";
-            outputs[i].appendChild(anchor);
-        }
-    </script>
+            body {
+                background-color: var(--background-color);
+                color: var(--text-color);
+            }
 
-</body>
+            table,
+            tr,
+            td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
 
+            td pre {
+                max-width: 600px;
+                overflow-x: scroll;
+                padding-bottom: 20px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <table id="tests"></table>
+
+        <script src="scripts/file_utils.js"></script>
+
+        <script>
+            // To update this list, run
+            // > python
+            // >>> from pathlib import Path
+            // >>> [x.name for x in Path("./carnatic-notation-app/tests/").iterdir()]
+            var tests = ["old_1.txt", "old_2.txt", "tutorial.txt"];
+            tests_table = document.getElementById("tests");
+
+            for (let i = 0; i < tests.length; i++) {
+                let anchor = document.createElement("a");
+                anchor.target = "_blank";
+                let params = {
+                    test: tests[i],
+                };
+                params = new URLSearchParams(params).toString();
+                console.log("Params", params);
+
+                anchor.href = "/carnatic-notation-app/template.html?" + params;
+                anchor.innerText = "Click to view output";
+
+                let tr = document.createElement("tr");
+
+                let td = document.createElement("td");
+                let heading = document.createElement("h2");
+                heading.innerText = tests[i];
+                td.appendChild(heading);
+                tr.appendChild(td);
+
+                let pre = document.createElement("pre");
+                fetch("/carnatic-notation-app/tests/" + tests[i])
+                    .then((response) => response.text())
+                    .then((text) => {
+                        return text;
+                    })
+                    .then((t) => {
+                        pre.innerText = t;
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                td.appendChild(pre);
+
+                td = document.createElement("td");
+                td.appendChild(anchor);
+                tr.appendChild(td);
+                tests_table.appendChild(tr);
+            }
+        </script>
+    </body>
 </html>
