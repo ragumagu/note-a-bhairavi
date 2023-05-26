@@ -13,6 +13,17 @@ function add_text(e) {
 
         sel.removeAllRanges();
         sel.addRange(range);
+    } else {
+        console.log("selection is not a textnode")
+        sel.anchorNode.innerText += inp_text;
+        sel.anchorNode.focus();
+
+        var range = document.createRange();
+        range.setStart(sel.anchorNode, sel.anchorNode.innerText.length);
+        range.collapse(true);
+
+        sel.removeAllRanges();
+        sel.addRange(range);
     }
 }
 
@@ -69,14 +80,7 @@ function editor_on_input(e) {
             );
             text = "||" + nbsp + text + nbsp + "||" + nbsp + "\n";
 
-            console.log("In keyup, text is ", text);
-            console.log(
-                "In keyup, text is eq to parseline",
-                text === parse_line
-            );
             let row_content = parse(text);
-            console.log("got parse result", row_content);
-            console.log("is parse result", row_content[0].isEqualNode(res1[0]));
             div.replaceChildren(...row_content[0].childNodes);
             div.classList.add("row");
 
@@ -129,15 +133,18 @@ function editor_on_input(e) {
                 JSON.stringify(text)
             );
 
-            text = "⁋" + nbsp + text + nbsp + "⁋";
+            text = "⁋" + nbsp + text + nbsp + "⁋" + "\n";
 
             let row_content = parse(text);
-            console.log("row_content", row_content[0]);
-            div.replaceChildren(...row_content[0]);
+            div.replaceChildren(...row_content[0].childNodes);
             div.classList.add("row");
 
             var range = document.createRange();
-            range.setStart(row_content[1].firstChild.firstChild, 1);
+
+            range.setStart(
+                div.querySelector(".letter-group").firstChild.firstChild,
+                1
+            );
             range.collapse(true);
 
             sel.removeAllRanges();
@@ -260,11 +267,21 @@ function editor_on_keyup(e) {
         if (a.nodeType === 3) {
             a = a.parentNode;
         }
-        let span = a.closest(".start-row-marker");
-        if (span && !row_markers.includes(span.innerText)) {
-            let div = span.closest("div");
-            remove_row_markers(div, span.innerText[0]);
+
+        let row = a.closest("div");
+        let start = row.querySelector(".start-row-marker");
+        let end = row.querySelector(".end-row-marker");
+        if (start && end) {
+            if (start.innerText === end.innerText) {
+                return;
+            }
         }
+        if (!start && !end) {
+            return;
+        }
+
+        let t = start ? start.innerText : end.innerText;
+        remove_row_markers(row, t);
     } else if (e.key === "Delete") {
         let sel = window.getSelection();
         let a = sel.anchorNode;
@@ -272,10 +289,19 @@ function editor_on_keyup(e) {
             a = a.parentNode;
         }
 
-        let span = a.closest(".start-row-marker");
-        if (span && !row_markers.includes(span.innerText)) {
-            let div = span.closest("div");
-            remove_row_markers(div, span.innerText[0]);
+        let row = a.closest("div");
+        let start = row.querySelector(".start-row-marker");
+        let end = row.querySelector(".end-row-marker");
+        if (start && end) {
+            if (start.innerText === end.innerText) {
+                return;
+            }
         }
+        if (!start && !end) {
+            return;
+        }
+
+        let t = start ? start.innerText : end.innerText;
+        remove_row_markers(row, t);
     }
 }

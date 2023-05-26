@@ -46,7 +46,7 @@ function set_span_widths(rows) {
         span_widths.push(row_widths);
         num_of_columns.push(spans.length);
     });
-    console.log(span_widths);
+    // console.log(span_widths);
 
     let total_columns = Math.min(...num_of_columns);
 
@@ -62,7 +62,7 @@ function set_span_widths(rows) {
         target_widths.push(max_width);
     }
 
-    console.log(target_widths);
+    // console.log(target_widths);
     rows.forEach((row) => {
         row.querySelectorAll(".letter-group").forEach((span, idx) => {
             span.style.marginRight =

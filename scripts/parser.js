@@ -344,10 +344,3 @@ function parse(text) {
 // parse("|| a b  (cd) | df/sdf || \n");
 // parse("|| a b || ((cd)) | dfsdf || \n");
 // parse("a b || ((cd)) | dfsdf || \n");
-
-console.log("NBSP LINE");
-const parse_line = "||" + nbsp + nbsp + "||" + nbsp + Tokens.newLine;
-let res1 = parse(parse_line);
-console.log("RESULT", res1);
-let res2 = parse(parse_line);
-console.log("TWO RUNS SAME?:", res1[0].isEqualNode(res2[0]));

@@ -188,7 +188,6 @@
             let editor = document.querySelector("main");
 
             editor.style.width = table.getBoundingClientRect().width + "px";
-            console.log(table.getBoundingClientRect().width);
 
             editor.addEventListener("input", editor_on_input);
             // editor.addEventListener("beforeinput", editor_before_input);
@@ -211,6 +210,7 @@
                     apply_formatting(editor);
                 }
             }
+            editor.focus();
         </script>
     </body>
 </html>

@@ -21,7 +21,6 @@ function assert_and_add(node, start_strings, css_class) {
 }
 
 function apply_formatting(node) {
-    console.log("NODE", node);
     let divs = node.querySelectorAll("div");
     for (let i = 0; i < divs.length; i++) {
         let div = divs[i];
@@ -41,7 +40,7 @@ function apply_formatting(node) {
 
     node.querySelectorAll(".row-marker").forEach((marker)=>{
         marker.onclick = setup_table_for_alignment;
-        console.log("MARKER", marker);
+        // console.log("MARKER", marker);
     })
 
     let rows = node.querySelectorAll(".row")

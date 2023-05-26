@@ -16,6 +16,11 @@ function get_editor_text_content(elem) {
     elemRange.selectNode(elem);
     sel.addRange(elemRange);
     let text = sel.toString();
+    text = text.replaceAll("\r\n", "\n");
+    text = text.replaceAll("||\n", "||" + nbsp + "\n");
+    text = text.replaceAll(Tokens.pilcrow + "\n", Tokens.pilcrow + nbsp + "\n");
+    // console.log("SAVING TEXT");
+    // console.log(JSON.stringify(text));
 
     // Restore old selection and return
     sel.removeAllRanges();
