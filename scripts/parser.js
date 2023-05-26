@@ -246,13 +246,8 @@ function _process_row(tokens, startIndex, line) {
         idx += 1;
     }
     let markers = line.querySelectorAll(".row-marker");
-    for (let i = 0; i < markers.length; i++) {
-        if (i == 0) {
-            markers[i].classList.add("start-row-marker");
-        } else {
-            markers[i].classList.add("end-row-marker");
-        }
-    }
+    markers[0].classList.add("start-row-marker");
+    markers[markers.length - 1].classList.add("end-row-marker");
     return idx;
 }
 
@@ -321,6 +316,10 @@ function parse(text) {
                 i += 2;
                 new_line = false;
                 continue;
+            } else {
+                line.innerText += tokens[i];
+                i += 1;
+                new_line = false;
             }
         } else {
             line.innerText += tokens[i];
