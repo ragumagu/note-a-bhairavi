@@ -26,7 +26,7 @@ function _add_text(inp_text) {
     }
 }
 
-function add_text(e){
+function add_text(e) {
     _add_text(e.target.value);
 }
 
@@ -199,7 +199,54 @@ function editor_on_keydown(e) {
             _add_text(Tokens.interpunct);
 
             apply_formatting(e.target);
-            localStorage.setItem("input_string", get_editor_text_content(e.target));
+            localStorage.setItem(
+                "input_string",
+                get_editor_text_content(e.target)
+            );
+        }
+    } else if (e.key == "Home") {
+        let sel = window.getSelection();
+        let a = sel.focusNode;
+        if (a.nodeType === 3) {
+            a = a.parentNode;
+        }
+
+        let row = a.closest(".row");
+        if (row) {
+            var range = document.createRange();
+            if (e.shiftKey) {
+                range.setStart(row.firstChild, 0);
+                range.setEnd(sel.anchorNode, sel.anchorOffset);
+            } else {
+                range.setStart(row.firstChild, 0);
+                range.collapse(true);
+            }
+
+            sel.removeAllRanges();
+            sel.addRange(range);
+            e.preventDefault();
+        }
+    } else if (e.key == "End") {
+        let sel = window.getSelection();
+        let a = sel.focusNode;
+        if (a.nodeType === 3) {
+            a = a.parentNode;
+        }
+
+        let row = a.closest(".row");
+        if (row) {
+            var range = document.createRange();
+            if (e.shiftKey) {
+                range.setStart(sel.anchorNode, sel.anchorOffset);
+                range.setEnd(row.lastChild, row.lastChild.innerText.length);
+            } else {
+                range.setStart(row.lastChild, row.lastChild.innerText.length);
+                range.collapse(true);
+            }
+
+            sel.removeAllRanges();
+            sel.addRange(range);
+            e.preventDefault();
         }
     }
 }
