@@ -35,22 +35,11 @@ function apply_formatting(node) {
                 remove_alignment_nodes(div);
             }
         }
-        // console.log("applying formatting", div);
     }
 
     node.querySelectorAll(".row-marker").forEach((marker)=>{
         marker.onclick = setup_table_for_alignment;
-        // console.log("MARKER", marker);
     })
-
-    let rows = node.querySelectorAll(".row")
-    let i = 0;
-    while (i < rows.length) {
-        let table_rows = get_table_rows(rows[i]);
-        set_span_widths(table_rows);
-        i += table_rows.length;
-    }
-
 }
 
 function render_text(text, container) {

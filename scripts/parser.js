@@ -101,6 +101,7 @@ const Tokens = {
     leftParen: "(",
     rightParen: ")",
     pilcrow: "⁋",
+    interpunct: "·",
     plus: "+",
 };
 
@@ -108,7 +109,6 @@ const nbsp = String.fromCharCode(160);
 const row_markers = ["||", Tokens.pilcrow];
 
 const tokenChars = Object.values(Tokens);
-console.log(tokenChars, typeof tokenChars);
 
 function get_tokens(text) {
     let tokens = [];
@@ -146,6 +146,7 @@ function _process_letter_group(tokens, startIndex, line) {
             tokens[idx] === Tokens.newLine ||
             tokens[idx] === Tokens.pipe ||
             tokens[idx] === Tokens.pilcrow ||
+            tokens[idx] === Tokens.interpunct ||
             tokens[idx] === Tokens.slash
         ) {
             if (buf) {
@@ -227,7 +228,7 @@ function _process_row(tokens, startIndex, line) {
 
             buf = "";
             continue;
-        } else if (tokens[idx] == Tokens.slash) {
+        } else if (tokens[idx] == Tokens.interpunct || tokens[idx] == Tokens.slash) {
             let span = document.createElement("span");
             span.classList.add("separator");
             span.innerText = tokens[idx];

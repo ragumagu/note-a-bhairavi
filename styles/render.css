@@ -13,12 +13,16 @@
 }
 
 .row > * {
+    padding-right: 1ch;
     white-space: nowrap;
     display: table-cell;
-    padding-right: 8px;
     vertical-align: bottom;
 }
 
+.row-marker, .separator{
+    padding-right: 8px;
+    padding-left: 8px;
+}
 /* For the pilcrow */
 .end-row-marker {
     transform: scale(-1, 1);

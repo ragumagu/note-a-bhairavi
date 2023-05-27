@@ -13,7 +13,7 @@ function apply_rendering(container) {
                 pages.push(page_section);
                 page = [];
             }
-        } 
+        }
         page.push(divs[i]);
     }
 
@@ -45,13 +45,16 @@ function apply_rendering(container) {
         speed.innerText = speed.innerText.replaceAll("_", "").trim();
     });
 
-
     let rows = document.querySelectorAll(".row");
     rows.forEach((row) => {
         row.querySelectorAll(".separator").forEach((separator) => {
-            if (separator.innerText === "/") {
+            if (separator.innerText === Tokens.interpunct) {
                 row.removeChild(separator);
                 // separator.style.display = "none";
+            } else if (separator.innerText === Tokens.slash) {
+                row.childNodes.forEach((node) => {
+                    node.style.visibility = "hidden";
+                });
             }
         });
 

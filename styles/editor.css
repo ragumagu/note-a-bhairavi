@@ -10,17 +10,20 @@
     background-color: green;
 }
 
-.start-row-marker {
-    padding-right: 8px;
-    padding-left: 4px;
+.row-marker, .separator{
+    margin-right: 1ch;
+    padding-right: 1ch;
+    padding-left: 1ch;
 }
 
-.end-row-marker {
-    padding-left: 8px;
-    padding-right: 4px;
+.row {
+    display: table-row;
+}
 
-    /* For the pilcrow */
-    transform: scale(-1, 1);
+.row > * {
+    white-space: nowrap;
+    display: table-cell;
+    vertical-align: bottom;
 }
 
 .letter:hover {

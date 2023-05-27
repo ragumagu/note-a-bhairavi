@@ -35,43 +35,7 @@ function get_table_rows(node) {
 }
 
 function set_span_widths(rows) {
-    let span_widths = [];
-    let num_of_columns = [];
-    rows.forEach((row) => {
-        let row_widths = [];
-        let spans = row.querySelectorAll(".letter-group");
-        spans.forEach((span) => {
-            row_widths.push(Math.ceil(span.getBoundingClientRect().width));
-        });
-        span_widths.push(row_widths);
-        num_of_columns.push(spans.length);
-    });
-    // console.log(span_widths);
-
-    let total_columns = Math.min(...num_of_columns);
-
-    // Get max width of a column
-    let target_widths = [];
-    for (let i = 0; i < total_columns; i++) {
-        let max_width = 0;
-        span_widths.forEach((row_widths) => {
-            if (row_widths[i] > max_width) {
-                max_width = row_widths[i];
-            }
-        });
-        target_widths.push(max_width);
-    }
-
-    // console.log(target_widths);
-    rows.forEach((row) => {
-        row.querySelectorAll(".letter-group").forEach((span, idx) => {
-            span.style.marginRight =
-                Math.ceil(
-                    target_widths[idx] -
-                        Math.ceil(span.getBoundingClientRect().width)
-                ) + "px";
-        });
-    });
+    return;
 }
 
 function add_alignment_helpers(rows) {
@@ -95,15 +59,12 @@ function add_alignment_helpers(rows) {
             separator.onclick = remove_separator;
         });
 
-        let start_marker = row.firstChild;
-        start_marker.onclick = remove_alignment_nodes_for_table;
-        let end_marker = row.querySelector(".end-row-marker");
-        end_marker.onclick = remove_alignment_nodes_for_table;
+        row.querySelectorAll(".row-marker").forEach((marker) => {
+            marker.onclick = remove_alignment_nodes_for_table;
+        });
 
         row.classList.add("row-marked-for-alignment");
     });
-
-    set_span_widths(rows);
 }
 
 function remove_separator(e) {
@@ -112,15 +73,12 @@ function remove_separator(e) {
     let separator = e.target;
     let row = separator.closest(".row");
     row.removeChild(separator);
-
-    let rows = get_table_rows(row);
-    add_alignment_helpers(rows);
-    set_span_widths(rows);
+    add_alignment_helpers([row]);
 }
 
 function insert_separator(e) {
     e.preventDefault();
-    let text = "/";
+    let text = Tokens.interpunct;
     if (window.event.ctrlKey) {
         text = "|";
     }
@@ -130,9 +88,7 @@ function insert_separator(e) {
     separator.onclick = remove_separator;
     e.target.parentNode.insertBefore(separator, e.target);
 
-    let rows = get_table_rows(separator.closest(".row"));
-    add_alignment_helpers(rows);
-    set_span_widths(rows);
+    add_alignment_helpers([separator.closest(".row")]);
 }
 
 function setup_table_for_alignment(e) {
@@ -161,5 +117,4 @@ function remove_alignment_nodes_for_table(e) {
             remove_alignment_nodes(row);
         });
     }
-    set_span_widths(rows);
 }

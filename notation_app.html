@@ -192,6 +192,7 @@
             editor.addEventListener("input", editor_on_input);
             // editor.addEventListener("beforeinput", editor_before_input);
             editor.addEventListener("keyup", editor_on_keyup);
+            editor.addEventListener("keydown", editor_on_keydown);
 
             let params = new URL(document.location).searchParams;
             let test = params.get("test");

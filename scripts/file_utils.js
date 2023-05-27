@@ -17,6 +17,7 @@ function get_editor_text_content(elem) {
     sel.addRange(elemRange);
     let text = sel.toString();
     text = text.replaceAll("\r\n", "\n");
+    text = text.replaceAll("\t", " ");
     text = text.replaceAll("||\n", "||" + nbsp + "\n");
     text = text.replaceAll(Tokens.pilcrow + "\n", Tokens.pilcrow + nbsp + "\n");
     // console.log("SAVING TEXT");

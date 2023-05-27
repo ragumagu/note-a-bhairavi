@@ -1,5 +1,4 @@
-function add_text(e) {
-    let inp_text = e.currentTarget.value;
+function _add_text(inp_text) {
     let sel = window.getSelection();
     if (sel.anchorNode.nodeType === 3) {
         let offset = sel.anchorOffset + inp_text.length;
@@ -14,7 +13,7 @@ function add_text(e) {
         sel.removeAllRanges();
         sel.addRange(range);
     } else {
-        console.log("selection is not a textnode")
+        console.log("selection is not a textnode");
         sel.anchorNode.innerText += inp_text;
         sel.anchorNode.focus();
 
@@ -25,6 +24,10 @@ function add_text(e) {
         sel.removeAllRanges();
         sel.addRange(range);
     }
+}
+
+function add_text(e){
+    _add_text(e.target.value);
 }
 
 document
@@ -187,6 +190,20 @@ function create_text_span(text, className) {
     return span;
 }
 
+function editor_on_keydown(e) {
+    if (e.key === "Tab") {
+        let sel = window.getSelection();
+        let a = sel.anchorNode;
+        if (a.nodeType === 3) {
+            e.preventDefault();
+            _add_text(Tokens.interpunct);
+
+            apply_formatting(e.target);
+            localStorage.setItem("input_string", get_editor_text_content(e.target));
+        }
+    }
+}
+
 function editor_on_keyup(e) {
     if (e.key === "Enter") {
         let sel = window.getSelection();
@@ -261,6 +278,9 @@ function editor_on_keyup(e) {
             sel.removeAllRanges();
             sel.addRange(range);
         }
+
+        apply_formatting(e.target);
+        localStorage.setItem("input_string", get_editor_text_content(e.target));
     } else if (e.key === "Backspace") {
         let sel = window.getSelection();
         let a = sel.anchorNode;
@@ -282,6 +302,9 @@ function editor_on_keyup(e) {
 
         let t = start ? start.innerText : end.innerText;
         remove_row_markers(row, t);
+
+        apply_formatting(e.target);
+        localStorage.setItem("input_string", get_editor_text_content(e.target));
     } else if (e.key === "Delete") {
         let sel = window.getSelection();
         let a = sel.anchorNode;
@@ -303,5 +326,8 @@ function editor_on_keyup(e) {
 
         let t = start ? start.innerText : end.innerText;
         remove_row_markers(row, t);
+
+        apply_formatting(e.target);
+        localStorage.setItem("input_string", get_editor_text_content(e.target));
     }
 }
