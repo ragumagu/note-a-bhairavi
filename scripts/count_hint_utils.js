@@ -107,6 +107,13 @@ function add_curly_brace(span, alignment) {
     if (len === 0) {
         return;
     }
+
+    if (span.classList.contains("su")){
+        len = len / 2;
+    }
+    if (span.classList.contains("du")){
+        len = len / 4;
+    }
     label = document.createElement("label");
     label.innerText = len;
     label.classList.add("text-align-center");
