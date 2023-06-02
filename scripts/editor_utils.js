@@ -53,6 +53,9 @@ function editor_on_input(e) {
         }
 
         let div = a.closest("div");
+        if (!div){
+            return;
+        }
 
         if (
             div.innerText.startsWith("||") &&
@@ -336,6 +339,9 @@ function editor_on_keyup(e) {
         }
 
         let row = a.closest("div");
+        if (!row){
+            return;
+        }
         let start = row.querySelector(".start-row-marker");
         let end = row.querySelector(".end-row-marker");
         if (start && end) {
