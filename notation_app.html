@@ -8,210 +8,177 @@
             rel="stylesheet"
             href="/carnatic-notation-app/styles/styles.css"
         />
+
         <link
             rel="stylesheet"
             href="/carnatic-notation-app/styles/editor.css"
         />
     </head>
     <body>
-        <header>
-            <div class="nav-left">
-                <h2>Notation</h2>
+        <div class="editor-container">
+            <header>
+                <div class="nav-left">
+                    <h2>Notation</h2>
 
-                <button
-                    title="Upload a file for editing"
-                    onclick="document.getElementById('file-upload').click()"
-                >
-                    Upload
-                </button>
-                <input
-                    type="file"
-                    id="file-upload"
-                    accept="text/html"
-                    style="display: none"
-                />
-            </div>
+                    <button
+                        title="Upload a file for editing"
+                        onclick="document.getElementById('file-upload').click()"
+                    >
+                        Upload
+                    </button>
+                    <input
+                        type="file"
+                        id="file-upload"
+                        accept="text/html"
+                        style="display: none"
+                    />
+                </div>
 
-            <div class="nav-center"></div>
+                <div class="nav-center"></div>
 
-            <div class="nav-right">
-                <button
-                    id="download-button"
-                    title="Render the content and download to a file."
-                >
-                    Download
-                </button>
-            </div>
-        </header>
+                <div class="nav-right">
+                    <button
+                        id="download-button"
+                        title="Render the content and download to a file."
+                    >
+                        Download
+                    </button>
+                </div>
+            </header>
 
-        <main contenteditable="true">
-            <div>$# Type some heading here...</div>
-            <div>Type some content here...</div>
-        </main>
+            <main></main>
+            <textarea></textarea>
 
-        <table id="aksharas_table">
-            <tr>
-                <td><button value="ಕ">ಕ</button></td>
-                <td><button value="ಕಿ">ಕಿ</button></td>
-                <td><button value="ಟ">ಟ</button></td>
-                <td><button value="ಕು">ಕು</button></td>
-                <td><button value="ಕಿಟ">ಕಿಟ</button></td>
-                <td><button value="ಕಿಟತಕ">ಕಿಟತಕ</button></td>
-                <td><button value="ಕಿಟತೊಂ,">ಕಿಟತೊಂ,</button></td>
-                <td><button value="ಕಿಟಕಿಟತೊಂ,">ಕಿಟಕಿಟತೊಂ,</button></td>
-            </tr>
-            <tr>
-                <td><button value="ಗಿ">ಗಿ</button></td>
-                <td><button value="ಗು">ಗು</button></td>
-                <td><button value="ಗುಂ">ಗುಂ</button></td>
-                <td><button value="ಝ">ಝ</button></td>
-                <td><button value="ಝಂ">ಝಂ</button></td>
-            </tr>
-            <tr>
-                <td><button value="ತ">ತ</button></td>
-                <td><button value="ರಿ">ರಿ</button></td>
-                <td><button value="ತಾ">ತಾ</button></td>
-                <td><button value="ತಾ,">ತಾ,</button></td>
-                <td><button value="ತಾ,,">ತಾ,,</button></td>
-                <td><button value="ತಾ,;">ತಾ,;</button></td>
-            </tr>
-            <tr>
-                <td><button value="ತಾಂ">ತಾಂ</button></td>
-                <td><button value="ತಾಂ,">ತಾಂ,</button></td>
-                <td><button value="ತಾಂಗು">ತಾಂಗು</button></td>
-                <td><button value="ತ್ಲಾಂ">ತ್ಲಾಂ</button></td>
-                <td><button value="ತೊ">ತೊ</button></td>
-                <td><button value="ತೊಂ">ತೊಂ</button></td>
-                <td><button value="ತೊಂ,">ತೊಂ,</button></td>
-                <td><button value="ತೊಂಗು">ತೊಂಗು</button></td>
-            </tr>
-            <tr>
-                <td><button value="ತಕ">ತಕ</button></td>
-                <td><button value="ತಕಿಟ">ತಕಿಟ</button></td>
-                <td><button value="ತರಿಕಿಟ">ತರಿಕಿಟ</button></td>
-                <td><button value="ತರಿಕಿಟತಕ">ತರಿಕಿಟತಕ</button></td>
-                <td>
-                    <button value="ದಿಗುತರಿಕಿಟತಕ">ದಿಗುತರಿಕಿಟತಕ</button>
-                </td>
-                <td>
-                    <button value="ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ">
-                        ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ
-                    </button>
-                </td>
-            </tr>
+            <table id="aksharas_table">
+                <tr>
+                    <td><button value="ಕ">ಕ</button></td>
+                    <td><button value="ಕಿ">ಕಿ</button></td>
+                    <td><button value="ಟ">ಟ</button></td>
+                    <td><button value="ಕು">ಕು</button></td>
+                    <td><button value="ಕಿಟ">ಕಿಟ</button></td>
+                    <td><button value="ಕಿಟತಕ">ಕಿಟತಕ</button></td>
+                    <td><button value="ಕಿಟತೊಂ,">ಕಿಟತೊಂ,</button></td>
+                    <td><button value="ಕಿಟಕಿಟತೊಂ,">ಕಿಟಕಿಟತೊಂ,</button></td>
+                </tr>
+                <tr>
+                    <td><button value="ಗಿ">ಗಿ</button></td>
+                    <td><button value="ಗು">ಗು</button></td>
+                    <td><button value="ಗುಂ">ಗುಂ</button></td>
+                    <td><button value="ಝ">ಝ</button></td>
+                    <td><button value="ಝಂ">ಝಂ</button></td>
+                </tr>
+                <tr>
+                    <td><button value="ತ">ತ</button></td>
+                    <td><button value="ರಿ">ರಿ</button></td>
+                    <td><button value="ತಾ">ತಾ</button></td>
+                    <td><button value="ತಾ,">ತಾ,</button></td>
+                    <td><button value="ತಾ;">ತಾ,,</button></td>
+                </tr>
+                <tr>
+                    <td><button value="ತಾಂ">ತಾಂ</button></td>
+                    <td><button value="ತಾಂ,">ತಾಂ,</button></td>
+                    <td><button value="ತಾಂಗು">ತಾಂಗು</button></td>
+                    <td><button value="ತ್ಲಾಂ">ತ್ಲಾಂ</button></td>
+                    <td><button value="ತೊ">ತೊ</button></td>
+                    <td><button value="ತೊಂ">ತೊಂ</button></td>
+                    <td><button value="ತೊಂ,">ತೊಂ,</button></td>
+                    <td><button value="ತೊಂಗು">ತೊಂಗು</button></td>
+                </tr>
+                <tr>
+                    <td><button value="ತಕ">ತಕ</button></td>
+                    <td><button value="ತಕಿಟ">ತಕಿಟ</button></td>
+                    <td><button value="ತರಿಕಿಟ">ತರಿಕಿಟ</button></td>
+                    <td><button value="ತರಿಕಿಟತಕ">ತರಿಕಿಟತಕ</button></td>
+                    <td>
+                        <button value="ದಿಗುತರಿಕಿಟತಕ">ದಿಗುತರಿಕಿಟತಕ</button>
+                    </td>
+                    <td>
+                        <button value="ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ">
+                            ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ
+                        </button>
+                    </td>
+                </tr>
 
-            <tr>
-                <td><button value="ದಿ">ದಿ</button></td>
-                <td><button value="ದಿಗು">ದಿಗು</button></td>
-                <td><button value="ಧಿ">ಧಿ</button></td>
-                <td><button value="ಧಿ,">ಧಿ,</button></td>
-                <td><button value="ತ,ದಿ,">ತ,ದಿ,</button></td>
-            </tr>
-            <tr>
-                <td><button value="ಧಿಂ">ಧಿಂ</button></td>
-                <td><button value="ಧಿಂ,">ಧಿಂ,</button></td>
-                <td><button value="ಧಿಂ,,">ಧಿಂ,,</button></td>
-                <td><button value="ಧಿಂ,;">ಧಿಂ,;</button></td>
-                <td><button value="ಧಿಂ,ಕು">ಧಿಂ,ಕು</button></td>
-                <td><button value="ಧುಂ">ಧುಂ</button></td>
-                <td><button value="ನ">ನ</button></td>
-                <td><button value="ನ್ನ">ನ್ನ</button></td>
-            </tr>
-            <tr>
-                <td><button value="ನಂ">ನಂ</button></td>
-                <td><button value="ಮಿ">ಮಿ</button></td>
-                <td><button value="ಣ">ಣ</button></td>
-                <td><button value="ಣು">ಣು</button></td>
-                <td>
-                    <button value="ತಕದಿಮಿ ತಕಝಣು">ತಕದಿಮಿ ತಕಝಣು</button>
-                </td>
-                <td><button value="ತಕಝಣು">ತಕಝಣು</button></td>
-                <td><button value="ತಳಾಂಗು">ತಳಾಂಗು</button></td>
-            </tr>
-            <tr>
-                <td><button value="ತದಿಗಿಣತೊಂ">ತದಿಗಿಣತೊಂ</button></td>
-                <td>
-                    <button value="ತಧಿಂ,ಗಿಣತೊಂ">ತಧಿಂ,ಗಿಣತೊಂ</button>
-                </td>
-                <td>
-                    <button value="ತ,ಧಿಂ,ಗಿಣತೊಂ">ತ,ಧಿಂ,ಗಿಣತೊಂ</button>
-                </td>
-                <td>
-                    <button value="ತಧಿಂ,ಗಿ,ಣ,ತೊಂ">ತಧಿಂ,ಗಿ,ಣ,ತೊಂ</button>
-                </td>
-                <td>
-                    <button value="ತ,ಧಿಂ,ಗಿ,ಣ,ತೊಂ">ತ,ಧಿಂ,ಗಿ,ಣ,ತೊಂ</button>
-                </td>
-                <td>
-                    <button value="ತದಿತ(ಕಿಟ)ತೊಂ">
-                        ತದಿತ<span class="su">ಕಿಟ</span>ತೊಂ
-                    </button>
-                </td>
-                <td>
-                    <button value="ತಧಿಂ,ತ(ಕಿಟ)ತೊಂ">
-                        ತಧಿಂ,ತ<span class="su">ಕಿಟ</span>ತೊಂ
-                    </button>
-                </td>
-                <td>
-                    <button value="ತ,ಧಿಂ,ತ(ಕಿಟ)ತೊಂ">
-                        ತ,ಧಿಂ,ತ<span class="su">ಕಿಟ</span>ತೊಂ
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button value="ತ,; ಧಿಂ,; ಗಿ,; ಣ,; ತೊಂ,;">
-                        ತ,; ಧಿಂ,; ಗಿ,; ಣ,; ತೊಂ,;
-                    </button>
-                </td>
-                <td>
-                    <button value="ತ,, ಧಿಂ,, ಗಿ,, ಣ,, ತೊಂ,,">
-                        ತ,, ಧಿಂ,, ಗಿ,, ಣ,, ತೊಂ,,
-                    </button>
-                </td>
-                <td>
-                    <button value="ತ, ಧಿಂ, ಗಿ, ಣ, ತೊಂ,">
-                        ತ, ಧಿಂ, ಗಿ, ಣ, ತೊಂ,
-                    </button>
-                </td>
-            </tr>
-        </table>
+                <tr>
+                    <td><button value="ದಿ">ದಿ</button></td>
+                    <td><button value="ದಿಗು">ದಿಗು</button></td>
+                    <td><button value="ಧಿ">ಧಿ</button></td>
+                    <td><button value="ಧಿ,">ಧಿ,</button></td>
+                    <td><button value="ತ,ದಿ,">ತ,ದಿ,</button></td>
+                </tr>
+                <tr>
+                    <td><button value="ಧಿಂ">ಧಿಂ</button></td>
+                    <td><button value="ಧಿಂ,">ಧಿಂ,</button></td>
+                    <td><button value="ಧಿಂ,,">ಧಿಂ,,</button></td>
+                    <td><button value="ಧಿಂ,;">ಧಿಂ,;</button></td>
+                    <td><button value="ಧಿಂ,ಕು">ಧಿಂ,ಕು</button></td>
+                    <td><button value="ಧುಂ">ಧುಂ</button></td>
+                    <td><button value="ನ">ನ</button></td>
+                    <td><button value="ನ್ನ">ನ್ನ</button></td>
+                </tr>
+                <tr>
+                    <td><button value="ನಂ">ನಂ</button></td>
+                    <td><button value="ಮಿ">ಮಿ</button></td>
+                    <td><button value="ಣ">ಣ</button></td>
+                    <td><button value="ಣು">ಣು</button></td>
+                    <td>
+                        <button value="ತಕದಿಮಿ ತಕಝಣು">ತಕದಿಮಿ ತಕಝಣು</button>
+                    </td>
+                    <td><button value="ತಕಝಣು">ತಕಝಣು</button></td>
+                    <td><button value="ತಳಾಂಗು">ತಳಾಂಗು</button></td>
+                </tr>
+                <tr>
+                    <td><button value="ತದಿಗಿಣತೊಂ">ತದಿಗಿಣತೊಂ</button></td>
+                    <td>
+                        <button value="ತಧಿಂ,ಗಿಣತೊಂ">ತಧಿಂ,ಗಿಣತೊಂ</button>
+                    </td>
+                    <td>
+                        <button value="ತ,ಧಿಂ,ಗಿಣತೊಂ">ತ,ಧಿಂ,ಗಿಣತೊಂ</button>
+                    </td>
+                    <td>
+                        <button value="ತಧಿಂ,ಗಿ,ಣ,ತೊಂ">ತಧಿಂ,ಗಿ,ಣ,ತೊಂ</button>
+                    </td>
+                    <td>
+                        <button value="ತ,ಧಿಂ,ಗಿ,ಣ,ತೊಂ">ತ,ಧಿಂ,ಗಿ,ಣ,ತೊಂ</button>
+                    </td>
+                    <td>
+                        <button value="ತದಿತ(ಕಿಟ)ತೊಂ">
+                            ತದಿತ<span class="su">ಕಿಟ</span>ತೊಂ
+                        </button>
+                    </td>
+                    <td>
+                        <button value="ತಧಿಂ,ತ(ಕಿಟ)ತೊಂ">
+                            ತಧಿಂ,ತ<span class="su">ಕಿಟ</span>ತೊಂ
+                        </button>
+                    </td>
+                    <td>
+                        <button value="ತ,ಧಿಂ,ತ(ಕಿಟ)ತೊಂ">
+                            ತ,ಧಿಂ,ತ<span class="su">ಕಿಟ</span>ತೊಂ
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button value="ತ,; ಧಿಂ,; ಗಿ,; ಣ,; ತೊಂ,;">
+                            ತ,; ಧಿಂ,; ಗಿ,; ಣ,; ತೊಂ,;
+                        </button>
+                    </td>
+                    <td>
+                        <button value="ತ,, ಧಿಂ,, ಗಿ,, ಣ,, ತೊಂ,,">
+                            ತ,, ಧಿಂ,, ಗಿ,, ಣ,, ತೊಂ,,
+                        </button>
+                    </td>
+                    <td>
+                        <button value="ತ, ಧಿಂ, ಗಿ, ಣ, ತೊಂ,">
+                            ತ, ಧಿಂ, ಗಿ, ಣ, ತೊಂ,
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
-        <script src="scripts/table_utils.js"></script>
-        <script src="scripts/markup_utils.js"></script>
-        <script src="scripts/file_utils.js"></script>
-        <script src="scripts/editor_utils.js"></script>
         <script src="scripts/parser.js"></script>
-
-        <script>
-            let table = document.querySelector("#aksharas_table");
-            let editor = document.querySelector("main");
-
-            editor.style.width = table.getBoundingClientRect().width + "px";
-
-            editor.addEventListener("input", editor_on_input);
-            // editor.addEventListener("beforeinput", editor_before_input);
-            editor.addEventListener("keyup", editor_on_keyup);
-            editor.addEventListener("keydown", editor_on_keydown);
-
-            let params = new URL(document.location).searchParams;
-            let test = params.get("test");
-            if (test) {
-                let url = `/experiments/notation-v2/tests/${test}.txt`;
-                fetch(url)
-                    .then((response) => response.text())
-                    .then((input) => {
-                        render_text(input, editor);
-                        apply_formatting(editor);
-                    });
-            } else {
-                let input_string = localStorage.getItem("input_string");
-                if (input_string) {
-                    render_text(input_string, editor);
-                    apply_formatting(editor);
-                }
-            }
-            editor.focus();
-        </script>
+        <script src="scripts/editor.js"></script>
+        <script src="scripts/render.js"></script>
     </body>
 </html>

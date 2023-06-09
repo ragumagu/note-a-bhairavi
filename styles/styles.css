@@ -1,11 +1,11 @@
-* {
-    box-sizing: border-box;
-}
-
 :root {
     --body-background-color: #fffff8;
     --body-text-color: #111;
 }
+
+/* html {
+    height: 100%;
+} */
 
 header {
     position: sticky;
@@ -47,7 +47,6 @@ header > div {
 
 body {
     margin: 0px;
-    height: 100%;
 
     background-color: rgb(125, 88, 88);
     background-image: repeating-linear-gradient(
@@ -60,14 +59,54 @@ body {
     background-attachment: fixed;
 }
 
+main {
+    border: 2px solid black;
+    padding: 4px;
+    white-space: -moz-pre-space;
+    font-size: small;
+}
+
 .h1 {
-    font-size: x-large;
+    font-size: large;
     font-weight: 800;
 }
 .h2 {
-    font-size: large;
+    font-size: medium;
     font-weight: 700;
 }
+
+.row {
+    display: table-row;
+}
+.row > .marker,
+.row > .separator,
+.row > .group,
+.row > .phrase {
+    display: table-cell;
+}
+
+.row > * {
+    white-space: nowrap;
+    vertical-align: bottom;
+}
+.su {
+    border-bottom: solid 1px;
+    /* text-decoration: underline; */
+}
+
+.du {
+    /* text-decoration: underline; */
+    /* border-bottom: solid 1px; */
+    border-bottom: double 3px;
+}
+
+
+.subscript {
+    position: relative;
+    bottom: -0.5em;
+    font-size: 80%;
+}
+
 
 .text-align-left {
     text-align: left;
@@ -77,53 +116,4 @@ body {
 }
 .text-align-center {
     text-align: center;
-}
-
-
-/* CSS for horizontal curly brace */
-
-:root {
-    --curly-top-border-radius: 8px;
-}
-
-.count-hints-container {
-    display: inline-flex;
-    flex-direction: column;
-}
-
-.count-hints-container span {
-    flex-basis: 0;
-}
-
-.curly-brace-group {
-    display: flex;
-    transform: translateY(var(--curly-top-border-radius));
-}
-
-.curly-brace-left-arc {
-    width: var(--curly-top-border-radius);
-    height: var(--curly-top-border-radius);
-    border-top-left-radius: var(--curly-top-border-radius);
-    border: 1px solid brown;
-    border-right: none;
-    border-bottom: none;
-}
-
-.curly-brace-right-arc {
-    width: var(--curly-top-border-radius);
-    height: var(--curly-top-border-radius);
-    border-top-right-radius: var(--curly-top-border-radius);
-    border: 1px solid brown;
-    border-left: none;
-    border-bottom: none;
-}
-
-.curly-brace-invert {
-    transform: rotate(-180deg)
-        translateY(calc(var(--curly-top-border-radius) - 1px));
-}
-
-.curly-brace-line {
-    flex: 1;
-    border-top: solid brown 1px;
 }

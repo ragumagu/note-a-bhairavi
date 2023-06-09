@@ -1,3 +1,25 @@
+const Tokens = {
+    pipe: "|",
+    slash: "/",
+    dollar: "$",
+    hash: "#",
+    newLine: "\n",
+    underscore: "_",
+    leftBracket: "[",
+    rightBracket: "]",
+    leftParen: "(",
+    rightParen: ")",
+    pilcrow: "⁋",
+    interpunct: "·",
+};
+
+const nbsp = String.fromCharCode(160);
+const row_markers = ["||", Tokens.pilcrow];
+
+const tokenChars = Object.values(Tokens);
+
+let additional_classes = [];
+
 const Aksharas = {
     ಕ: 1,
     ಕಿ: 1,
@@ -31,31 +53,6 @@ const Aksharas = {
     ";": 2,
 };
 
-let akshara_list = Object.keys(Aksharas).sort((a, b) => {
-    return b.length - a.length;
-});
-
-function get_aksharas_count(text) {
-    let i = 0;
-    let count = 0;
-    while (i < text.length) {
-        let match = false;
-        for (let j = 0; j < akshara_list.length; j++) {
-            if (text.startsWith(akshara_list[j], i)) {
-                match = akshara_list[j];
-                break;
-            }
-        }
-        if (match) {
-            count += Aksharas[match];
-            i += match.length;
-        } else {
-            i += 1;
-        }
-    }
-    return count;
-}
-
 let kannada_to_english = {
     ಕ: "ka",
     ಕಿ: "ki",
@@ -88,30 +85,33 @@ let kannada_to_english = {
     ",": ",",
     ";": ";",
 };
-
-const Tokens = {
-    pipe: "|",
-    slash: "/",
-    dollar: "$",
-    hash: "#",
-    newLine: "\n",
-    underscore: "_",
-    leftBracket: "[",
-    rightBracket: "]",
-    leftParen: "(",
-    rightParen: ")",
-    pilcrow: "⁋",
-    interpunct: "·",
-    plus: "+",
-};
-
-const nbsp = String.fromCharCode(160);
-const row_markers = ["||", Tokens.pilcrow];
-
-const tokenChars = Object.values(Tokens);
+let akshara_list = Object.keys(Aksharas).sort((a, b) => {
+    return b.length - a.length;
+});
+function get_aksharas_count(text) {
+    let i = 0;
+    let count = 0;
+    while (i < text.length) {
+        let match = false;
+        for (let j = 0; j < akshara_list.length; j++) {
+            if (text.startsWith(akshara_list[j], i)) {
+                match = akshara_list[j];
+                break;
+            }
+        }
+        if (match) {
+            count += Aksharas[match];
+            i += match.length;
+        } else {
+            i += 1;
+        }
+    }
+    return count;
+}
 
 function get_tokens(text) {
     let tokens = [];
+
     let buff = "";
     for (let idx = 0; idx < text.length; idx++) {
         if (tokenChars.includes(text[idx])) {
@@ -132,215 +132,257 @@ function get_tokens(text) {
     return tokens;
 }
 
-function _process_letter_group(tokens, startIndex, line) {
-    let idx = startIndex;
-
-    let opening_parens = 0;
-    let closing_parens = 0;
-    let out = document.createElement("span");
-    out.classList.add("letter-group");
-    let buf = "";
-    while (true) {
-        if (
-            idx === tokens.length ||
-            tokens[idx] === Tokens.newLine ||
-            tokens[idx] === Tokens.pipe ||
-            tokens[idx] === Tokens.pilcrow ||
-            tokens[idx] === Tokens.interpunct ||
-            tokens[idx] === Tokens.slash
-        ) {
-            if (buf) {
-                let span = document.createElement("span");
-                span.innerText = buf;
-                out.appendChild(span);
-            }
-            break;
-        } else if (tokens[idx] === Tokens.leftParen) {
-            if (buf && buf != "(") {
-                let span = document.createElement("span");
-                span.innerText = buf;
-                out.appendChild(span);
-                buf = "";
-            }
-
-            buf += tokens[idx];
-            opening_parens += 1;
-        } else if (tokens[idx] === Tokens.rightParen) {
-            buf += tokens[idx];
-            closing_parens -= 1;
-            if (opening_parens + closing_parens == 0) {
-                let span = document.createElement("span");
-                span.classList.add("speed");
-                span.innerText = buf;
-
-                if (tokens[idx + 1] === Tokens.underscore) {
-                    span.innerText += "_";
-                    let sub = document.createElement("span");
-                    sub.innerText = tokens[idx + 2].trim();
-                    sub.classList.add("subscript");
-                    span.appendChild(sub);
-
-                    out.appendChild(span);
-                    idx += 3;
-                } else if (opening_parens == 2) {
-                    span.classList.add("du");
-                    out.appendChild(span);
-                    idx += 1;
-                } else {
-                    span.classList.add("su");
-                    out.appendChild(span);
-                    idx += 1;
-                }
-                buf = "";
-                opening_parens = 0;
-                closing_parens = 0;
-                continue;
-            }
-        } else {
-            buf += tokens[idx];
-        }
-        idx += 1;
-    }
-    line.appendChild(out);
-    return idx;
+function lint(text) {
+    text = text.replaceAll("\r\n", "\n") + "\n";
+    return text;
 }
 
-function _process_row(tokens, startIndex, line) {
-    let idx = startIndex;
-    let buf = "";
+function add_phrase_to_container(token, i, container, classes) {
+    let char = document.createElement("span");
+    char.innerText = token;
 
-    while (true) {
-        if (tokens[idx] == Tokens.pipe) {
-            let span = document.createElement("span");
-            buf += tokens[idx];
+    classes.forEach((_class) => {
+        char.classList.add(_class);
+    });
+    additional_classes.forEach((_class) => {
+        char.classList.add(_class);
+    });
 
-            if (tokens[idx + 1] && tokens[idx + 1] == Tokens.pipe) {
-                buf += tokens[idx + 1];
-                span.classList.add("row-marker");
-                idx += 2;
-            } else {
-                span.classList.add("separator");
-                idx += 1;
+    char.id = `char-${i}`;
+    container.appendChild(char);
+}
+
+let alignment = {};
+
+function add_alignment_classes(line) {
+    if (line.innerText.indexOf("[") >= 0) {
+        alignment = {};
+        groups = line.childNodes;
+        for (let i = 0; i < groups.length; i++) {
+            if (groups[i].innerText.trim() === "[L]") {
+                alignment[i] = "text-align-left";
+            } else if (groups[i].innerText.trim() === "[R]") {
+                alignment[i] = "text-align-right";
+            } else if (groups[i].innerText.trim() === "[C]") {
+                alignment[i] = "text-align-center";
+            }
+        }
+    }
+
+    console.log("alignment:", alignment);
+    for (const [idx, _class] of Object.entries(alignment)) {
+        line.childNodes[idx].classList.add(_class);
+    }
+}
+
+function _process_char_group(tokens, idx, line) {
+    let group = document.createElement("span");
+    group.classList.add("group");
+
+    let phrase = document.createElement("span");
+    phrase.classList.add("phrase");
+
+    while (idx < tokens.length) {
+        if (
+            tokens[idx] === Tokens.newLine ||
+            tokens[idx] === Tokens.interpunct ||
+            tokens[idx] === Tokens.pilcrow ||
+            tokens[idx] === Tokens.pipe
+        ) {
+            if (phrase.childNodes.length > 0) {
+                group.appendChild(phrase);
             }
 
-            span.innerText = buf;
-            line.appendChild(span);
+            if (group.childNodes.length > 0) {
+                line.appendChild(group);
+            }
 
-            buf = "";
+            return idx;
+        } else if (tokens[idx] == Tokens.leftParen) {
+            if (phrase.childNodes.length > 0) {
+                group.appendChild(phrase);
+
+                phrase = document.createElement("span");
+                phrase.classList.add("phrase");
+            }
+
+            let right_paren_pos = idx + 1;
+            let match = 1;
+            while (right_paren_pos < tokens.length) {
+                if (tokens[right_paren_pos] == Tokens.rightParen) {
+                    match -= 1;
+                } else if (tokens[right_paren_pos] == Tokens.leftParen) {
+                    match += 1;
+                }
+                if (match == 0) {
+                    break;
+                }
+                right_paren_pos += 1;
+            }
+
+            if (additional_classes.includes("su")) {
+                additional_classes.push("du");
+            } else if (
+                tokens[right_paren_pos + 1] &&
+                tokens[right_paren_pos + 1] !== Tokens.underscore
+            ) {
+                additional_classes.push("su");
+            }
+
+            if (
+                additional_classes.includes("su") &&
+                tokens[idx + 1] &&
+                tokens[idx + 1] == Tokens.leftParen
+            ) {
+                additional_classes.push("du");
+            }
+        } else if (tokens[idx] == Tokens.rightParen) {
+            add_phrase_to_container(tokens[idx], idx, phrase, ["letter"]);
+
+            if (
+                additional_classes.includes("du") &&
+                tokens[idx + 1] &&
+                tokens[idx + 1] != Tokens.rightParen
+            ) {
+                additional_classes = additional_classes.filter(
+                    (i) => i != "du"
+                );
+
+                if (phrase.childNodes.length > 0) {
+                    group.appendChild(phrase);
+
+                    phrase = document.createElement("span");
+                    phrase.classList.add("phrase");
+                }
+            } else if (additional_classes.includes("su")) {
+                additional_classes = additional_classes.filter(
+                    (i) => i != "su"
+                );
+
+                if (phrase.childNodes.length > 0) {
+                    group.appendChild(phrase);
+
+                    phrase = document.createElement("span");
+                    phrase.classList.add("phrase");
+                }
+            }
+
+            idx += 1;
+
             continue;
-        } else if (tokens[idx] == Tokens.interpunct || tokens[idx] == Tokens.slash) {
-            let span = document.createElement("span");
-            span.classList.add("separator");
-            span.innerText = tokens[idx];
-            line.appendChild(span);
-        } else if (tokens[idx] == Tokens.pilcrow) {
-            let span = document.createElement("span");
-            span.classList.add("row-marker");
-            span.innerText = tokens[idx];
-            line.appendChild(span);
-        } else if (tokens[idx] == Tokens.newLine || idx === tokens[length]) {
-            break;
-        } else {
-            idx = _process_letter_group(tokens, idx, line);
+        } else if (tokens[idx] === Tokens.underscore) {
+            if (phrase.childNodes.length > 0) {
+                group.appendChild(phrase);
+
+                phrase = document.createElement("span");
+                phrase.classList.add("phrase");
+            }
+            add_phrase_to_container(tokens[idx], idx, phrase, [
+                "letter",
+                "underscore",
+            ]);
+            idx += 1;
+            while (idx < tokens.length) {
+                if (
+                    tokens[idx] &&
+                    tokens[idx] != " " &&
+                    tokens[idx] != Tokens.newLine
+                ) {
+                    add_phrase_to_container(tokens[idx], idx, phrase, [
+                        "letter",
+                        "subscript",
+                    ]);
+                    idx += 1;
+                } else {
+                    break;
+                }
+            }
             continue;
         }
+        add_phrase_to_container(tokens[idx], idx, phrase, ["letter"]);
         idx += 1;
     }
-    let markers = line.querySelectorAll(".row-marker");
-    markers[0].classList.add("start-row-marker");
-    markers[markers.length - 1].classList.add("end-row-marker");
-    return idx;
 }
 
 function parse(text) {
     console.log("INPUT:", JSON.stringify(text));
-    let tokens = get_tokens(text);
-    console.log("TOKENS:", JSON.stringify(tokens));
+
+    additional_classes = [];
+    let tokens = [...text];
+
     let i = 0;
     let lines = [];
     let line = document.createElement("div");
     let new_line = true;
+
+    let group = document.createElement("span");
+    group.classList.add("group");
+
     while (true) {
-        if (i == tokens.length) {
+        if (i >= tokens.length) {
+            if (line.classList.contains("row")) {
+                add_alignment_classes(line);
+            }
             lines.push(line);
             break;
         }
-        if (
+
+        if (tokens[i] === Tokens.newLine) {
+            if (line.childNodes.length > 0) {
+                if (line.classList.contains("row")) {
+                    add_alignment_classes(line);
+                }
+                lines.push(line);
+            }
+            if (tokens[i + 1] && tokens[i + 1] == Tokens.newLine) {
+                alignment = {};
+                line = document.createElement("div");
+                line.innerHTML = "<br>";
+
+                line.id = `char-${i + 1}`;
+                line.classList.add("empty-line");
+                lines.push(line);
+            }
+            line = document.createElement("div");
+            i += 1;
+            new_line = true;
+            continue;
+        } else if (
             new_line &&
             tokens[i] == Tokens.dollar &&
             tokens[i + 1] &&
             tokens[i + 1] == Tokens.hash
         ) {
+            add_phrase_to_container(tokens[i], i, line, [
+                "chapter-title-marker",
+            ]);
+            add_phrase_to_container(tokens[i + 1], i, line, [
+                "chapter-title-marker",
+            ]);
             line.classList.add("h1");
-            line.appendChild(document.createTextNode("$#"));
             i += 2;
-            new_line = false;
-            continue;
         } else if (
             new_line &&
             tokens[i] == Tokens.hash &&
             tokens[i + 1] &&
             tokens[i + 1] == Tokens.hash
         ) {
+            add_phrase_to_container(tokens[i], i, line, ["heading-marker"]);
+            add_phrase_to_container(tokens[i + 1], i, line, ["heading-marker"]);
             line.classList.add("h2");
-            line.appendChild(document.createTextNode("##"));
             i += 2;
-            new_line = false;
-            continue;
         } else if (
-            new_line &&
-            tokens[i] == Tokens.pipe &&
-            tokens[i + 1] &&
-            tokens[i + 1] == Tokens.pipe
+            tokens[i] == Tokens.interpunct ||
+            tokens[i] === Tokens.pipe ||
+            tokens[i] === Tokens.pilcrow
         ) {
+            add_phrase_to_container(tokens[i], i, line, ["marker"]);
             line.classList.add("row");
-            i = _process_row(tokens, i, line);
-            new_line = false;
-            continue;
-        } else if (new_line && tokens[i] == Tokens.pilcrow) {
-            line.classList.add("row");
-            i = _process_row(tokens, i, line);
-            new_line = false;
-            continue;
-        } else if (tokens[i] == Tokens.newLine) {
-            lines.push(line);
-            if (tokens[i + 1] && tokens[i + 1] == Tokens.newLine) {
-                line = document.createElement("div");
-                line.innerHTML = "<br>";
-                lines.push(line);
-            }
-            line = document.createElement("div");
             i += 1;
-            new_line = true;
-        } else if (tokens[i] == Tokens.plus) {
-            if (tokens[i + 1] && tokens[i + 1] == Tokens.newLine) {
-                i += 2;
-                new_line = false;
-                continue;
-            } else {
-                line.innerText += tokens[i];
-                i += 1;
-                new_line = false;
-            }
         } else {
-            line.innerText += tokens[i];
-            i += 1;
-            new_line = false;
+            i = _process_char_group(tokens, i, line);
         }
+        new_line = false;
     }
-
     return lines;
 }
-
-// parse("");
-// parse(" ");
-// parse("ab");
-// parse("abc ");
-// parse("$# abc");
-// parse("## abc");
-// parse("abc\ndef");
-// parse("abc \ndef");
-// parse("a b  cd \n    dfsdf \n");
-// parse("|| a b  (cd) | df/sdf || \n");
-// parse("|| a b || ((cd)) | dfsdf || \n");
-// parse("a b || ((cd)) | dfsdf || \n");

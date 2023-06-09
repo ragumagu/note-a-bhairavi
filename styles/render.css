@@ -8,36 +8,58 @@
     overflow-x: scroll;
 }
 
-.row {
-    display: table-row;
+.row > .group {
+    display: table-cell;
 }
 
-.row > * {
-    padding-right: 1ch;
-    white-space: nowrap;
-    display: table-cell;
+.group > .phrase{
     vertical-align: bottom;
 }
 
-.row-marker, .separator{
-    padding-right: 8px;
-    padding-left: 8px;
-}
-/* For the pilcrow */
-.end-row-marker {
-    transform: scale(-1, 1);
+/* CSS for horizontal curly brace */
+
+:root {
+    --curly-top-border-radius: 8px;
 }
 
-.subscript {
-    position: relative;
-    bottom: -0.5em;
-    font-size: 80%;
+.count-hints-container {
+    display: inline-flex;
+    flex-direction: column;
 }
 
-.du {
-    border-bottom: double 3px;
+.count-hints-container span {
+    flex-basis: 0;
 }
 
-.su {
-    border-bottom: solid 1px;
+.curly-brace-group {
+    display: flex;
+    transform: translateY(var(--curly-top-border-radius));
+}
+
+.curly-brace-left-arc {
+    width: var(--curly-top-border-radius);
+    height: var(--curly-top-border-radius);
+    border-top-left-radius: var(--curly-top-border-radius);
+    border: 1px solid brown;
+    border-right: none;
+    border-bottom: none;
+}
+
+.curly-brace-right-arc {
+    width: var(--curly-top-border-radius);
+    height: var(--curly-top-border-radius);
+    border-top-right-radius: var(--curly-top-border-radius);
+    border: 1px solid brown;
+    border-left: none;
+    border-bottom: none;
+}
+
+.curly-brace-invert {
+    transform: rotate(-180deg)
+        translateY(calc(var(--curly-top-border-radius)));
+}
+
+.curly-brace-line {
+    flex: 1;
+    border-top: solid brown 1px;
 }

@@ -1,80 +1,23 @@
-.row-marker {
-    background-color: grey;
-}
-
-.row-marker:hover {
-    cursor: pointer;
-}
-
-.row-marked-for-alignment > .row-marker {
-    background-color: green;
-}
-
-.row-marker, .separator{
-    margin-right: 1ch;
-    padding-right: 1ch;
-    padding-left: 1ch;
-}
-
-.row {
-    display: table-row;
-}
-
-.row > * {
-    white-space: nowrap;
-    display: table-cell;
-    vertical-align: bottom;
-}
-
-.letter:hover {
-    background-color: lightgreen;
-    cursor: pointer;
-}
-
-.separator {
-    color: gray;
-    display: inline-block;
-    min-width: 10px;
-    text-align: center;
-}
-
-.row-marked-for-alignment > .separator:hover {
-    background-color: red;
-}
-
-.separator + .letter {
-    background-color: lightgreen;
-}
-
-.letter-group {
-    white-space: nowrap;
-    margin-right: 2px;
-}
-
-html,
-body {
-    display: flex;
-    flex-direction: column;
-    margin: 0px;
+.editor-container {
     height: 100%;
-    gap: 10px;
-}
-
-main {
-    flex: 1 1 auto;
-    align-self: center;
-    overflow: scroll;
-    padding: 4px;
-    border: 2px solid black;
-    background-color: var(--body-background-color);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 60px 3fr 1fr;
+    grid-template-areas:
+        "header header"
+        "editor preview"
+        "table table";
 }
 
 #aksharas_table {
-    align-self: center;
+    grid-area: table;
+    grid-column: span 2;
+    justify-self: center;
+
     max-width: min-content;
     border: 1px solid black;
     border-collapse: collapse;
-    font-size: xx-small;
+
     background-color: var(--body-background-color);
 }
 
@@ -86,13 +29,83 @@ main {
 }
 
 #aksharas_table td > button {
-    background-color: var(--background-color);
+    background-color: var(--body-background-color);
     border: 0;
     width: 100%;
     height: 100%;
     cursor: pointer;
 }
+textarea {
+    margin: 0;
+    grid-area: editor;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    resize: none;
+    background-color: var(--body-background-color);
 
-#aksharas_table td > button:hover {
-    background-color: #dfdfdf;
+    border: 2px solid black;
+    white-space: pre;
+}
+
+header {
+    grid-area: header;
+}
+main {
+    grid-area: preview;
+    overflow: scroll;
+    background-color: var(--body-background-color);
+}
+
+.caret-left {
+    border-left-width: 1px;
+    border-left-style: solid;
+    animation: blink-left 1s step-start 0s infinite;
+}
+
+@keyframes blink-left {
+    0% {
+        border-left-color: transparent;
+    }
+    50% {
+        border-left-color: black;
+    }
+    100% {
+        border-left-color: transparent;
+    }
+}
+
+.caret-right {
+    border-right-width: 1px;
+    border-right-style: solid;
+    animation: blink-right 1s step-start 0s infinite;
+}
+
+@keyframes blink-right {
+    0% {
+        border-right-color: transparent;
+    }
+    50% {
+        border-right-color: black;
+    }
+    100% {
+        border-right-color: transparent;
+    }
+}
+
+.letter,
+.marker {
+    cursor: pointer;
+}
+
+.letter:hover {
+    background-color: lightgreen;
+}
+
+.marker:hover {
+    background-color: red;
+}
+
+html,
+body {
+    height: 100%;
 }
