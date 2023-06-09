@@ -1,80 +1,3 @@
-function on_file_upload(e) {
-    if (e.target.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            let text = e.target.result;
-            let start_token = `<script id="input" type="text/template">`;
-            let end_token = `</script><!-- end of input -->`;
-            let start = text.indexOf(start_token);
-            let end = text.indexOf(end_token);
-            if (start === -1 || end === -1) {
-                let alert_message =
-                    "Could not parse uploaded file.\n" +
-                    "Please try to recover by these steps:\n1. Open the file in an editor, \n" +
-                    "2. Copy and paste the content into the input box \n" +
-                    "3. Download the file again.";
-                alert(alert_message);
-            }
-            if (start !== -1) {
-                start += start_token.length;
-            }
-
-            let input_text = text.substring(start, end);
-
-            editor.value = input_text;
-            render_text(input_text, preview);
-        };
-
-        reader.readAsText(e.target.files[0]);
-    }
-}
-
-if (document.getElementById("file-upload")) {
-    document.getElementById("file-upload").onclick = on_file_upload;
-}
-
-function download(text) {
-    // From https://stackoverflow.com/a/48550997
-    var blob = new Blob([text], {
-        type: "text/plain",
-    });
-    var anchor = document.createElement("a");
-    anchor.download = "notation.html";
-    anchor.href = window.URL.createObjectURL(blob);
-    anchor.target = "_blank";
-    anchor.style.display = "none"; // just to be safe!
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
-}
-
-async function download_on_click(e) {
-    localStorage.setItem("input_string", editor.value);
-    let input = localStorage.getItem("input_string");
-
-    fetch("/carnatic-notation-app/template.html")
-        .then((response) => response.text())
-        .then((text) => {
-            return text;
-        })
-        .then((t) => {
-            match = `<script id="input" type="text/template"></script>`;
-            replace_text = `<script id="input" type="text/template">\n${input}\n</script><!-- end of input -->`;
-
-            t = t.replace(match, replace_text);
-
-            download(t);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-}
-
-let download_button = document.getElementById("download-button");
-if (download_button) {
-    download_button.onclick = download_on_click;
-}
-
 function apply_rendering(text, container) {
     var startTime = performance.now();
     text = lint(text);
@@ -136,7 +59,6 @@ function apply_rendering(text, container) {
 
     let rows = document.querySelectorAll(".row");
     rows.forEach((row) => {
-
         if (row.innerText.indexOf("[") >= 0) {
             row.style.display = "none";
             return;
@@ -158,7 +80,6 @@ function apply_rendering(text, container) {
             }
         });
     });
-
 }
 
 function create_header() {
@@ -227,7 +148,6 @@ function create_table_of_contents() {
     let root_margin = header_height + "px 0px 0px 0px";
     document.querySelector("html").style.scrollPaddingTop =
         header_height + "px";
-    console.log("root margin", root_margin);
 
     let options = {
         rootMargin: root_margin,
@@ -412,8 +332,6 @@ var current_page_in_viewport = 0;
 
 function change_title_on_scroll(entries) {
     let any_visible = false;
-    console.log("Current page is", current_page_in_viewport);
-
     for (let i = 0; i < entries.length; i++) {
         if (entries[i].isIntersecting) {
             any_visible = true;
@@ -422,13 +340,6 @@ function change_title_on_scroll(entries) {
     }
 
     entries.forEach((entry) => {
-        console.log(
-            "Entry",
-            entry.target.innerHTML,
-            entry.boundingClientRect,
-            entry.isIntersecting
-        );
-
         // Adapted from https://stackoverflow.com/a/63820023
         if (entry.boundingClientRect.top > 100 && entry.isIntersecting) {
             // Title is entering from bottom of viewport
