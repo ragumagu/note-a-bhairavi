@@ -11,7 +11,7 @@ Support for a few kannada phrases is available. More languages will be added soo
 
 ## Tutorial:
 
-    #TODO: add tutorial
+[Click here](https://ragumagu.github.io/carnatic-notation-app/notation_app.html?content=tutorial) to go to the tutorial.
 
 ## Road-map:
 
