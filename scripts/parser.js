@@ -1,6 +1,7 @@
 const Tokens = {
     pipe: "|",
     slash: "/",
+    backSlash: "\\",
     dollar: "$",
     hash: "#",
     newLine: "\n",
@@ -155,7 +156,10 @@ function add_phrase_to_container(token, i, container, classes) {
 let alignment = {};
 
 function add_alignment_classes(line) {
-    if (line.innerText.indexOf("[") >= 0) {
+    if (
+        line.innerText.indexOf("[R]") >= 0 ||
+        line.innerText.indexOf("[C]") >= 0
+    ) {
         alignment = {};
         groups = line.childNodes;
         for (let i = 0; i < groups.length; i++) {
@@ -171,6 +175,9 @@ function add_alignment_classes(line) {
 
     console.log("alignment:", alignment);
     for (const [idx, _class] of Object.entries(alignment)) {
+        if (!line.childNodes[idx]) {
+            break;
+        }
         line.childNodes[idx].classList.add(_class);
     }
 }
@@ -187,6 +194,7 @@ function _process_char_group(tokens, idx, line) {
             tokens[idx] === Tokens.newLine ||
             tokens[idx] === Tokens.interpunct ||
             tokens[idx] === Tokens.pilcrow ||
+            tokens[idx] === Tokens.backSlash ||
             tokens[idx] === Tokens.pipe
         ) {
             if (phrase.childNodes.length > 0) {
@@ -374,6 +382,7 @@ function parse(text) {
         } else if (
             tokens[i] == Tokens.interpunct ||
             tokens[i] === Tokens.pipe ||
+            tokens[i] === Tokens.backSlash ||
             tokens[i] === Tokens.pilcrow
         ) {
             add_phrase_to_container(tokens[i], i, line, ["marker"]);

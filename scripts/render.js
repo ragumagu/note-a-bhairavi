@@ -59,24 +59,22 @@ function apply_rendering(text, container) {
 
     let rows = document.querySelectorAll(".row");
     rows.forEach((row) => {
-        if (row.innerText.indexOf("[") >= 0) {
+        if (
+            row.innerText.indexOf("[R]") >= 0 ||
+            row.innerText.indexOf("[C]") >= 0
+        ) {
             row.style.display = "none";
+            return;
+        } else if (row.innerText.indexOf("/") >= 0) {
+            row.style.visibility = "hidden";
             return;
         }
 
         row.querySelectorAll(".marker").forEach((separator) => {
             if (separator.innerText === Tokens.interpunct) {
                 row.removeChild(separator);
-            } else if (separator.innerText === Tokens.slash) {
-                row.childNodes.forEach((node) => {
-                    node.style.visibility = "hidden";
-                });
-            }
-        });
-
-        row.querySelectorAll(".row-marker").forEach((marker) => {
-            if (marker.innerText === "//") {
-                marker.innerText = "⁋";
+            } else if (separator.innerText === Tokens.backSlash) {
+                separator.style.visibility = "hidden";
             }
         });
     });
