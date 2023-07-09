@@ -8,14 +8,12 @@ function apply_rendering(text, container) {
             text.length
         } characters.`
     );
-    container.replaceChildren(...nodes);
 
     let pages = [];
     let page = [];
-    let divs = container.querySelectorAll("div");
 
-    for (let i = 0; i < divs.length; i++) {
-        if (divs[i].classList.contains("h1")) {
+    for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].classList.contains("h1")) {
             if (page.length > 0) {
                 let page_section = document.createElement("section");
                 page_section.classList.add("page");
@@ -25,7 +23,7 @@ function apply_rendering(text, container) {
                 page = [];
             }
         }
-        page.push(divs[i]);
+        page.push(nodes[i]);
     }
 
     if (page.length > 0) {
@@ -60,6 +58,7 @@ function apply_rendering(text, container) {
     let rows = document.querySelectorAll(".row");
     rows.forEach((row) => {
         if (
+            row.innerText.indexOf("[L]") >= 0 ||
             row.innerText.indexOf("[R]") >= 0 ||
             row.innerText.indexOf("[C]") >= 0
         ) {

@@ -8,10 +8,6 @@
     overflow-x: scroll;
 }
 
-.row > .group {
-    display: table-cell;
-}
-
 .group > .phrase{
     vertical-align: bottom;
 }

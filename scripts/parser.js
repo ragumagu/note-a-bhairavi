@@ -27,6 +27,7 @@ const Aksharas = {
     ಕು: 1,
     ಟ: 1,
     ಗಿ: 1,
+    ಗ: 1,
     ಗು: 1,
     ಗುಂ: 1,
     ಝ: 1,
@@ -40,6 +41,7 @@ const Aksharas = {
     ತೊ: 1,
     ತೊಂ: 1,
     ದಿ: 1,
+    ದಿಂ: 1,
     ಧಿ: 1,
     ಧಿಂ: 1,
     ಧುಂ: 1,
@@ -49,6 +51,7 @@ const Aksharas = {
     ಮಿ: 1,
     ಣ: 1,
     ಣು: 1,
+    ಳ: 1,
     ಳಾಂ: 2,
     ",": 1,
     ";": 2,
@@ -59,6 +62,7 @@ let kannada_to_english = {
     ಕಿ: "ki",
     ಕು: "ku",
     ಟ: "Ta",
+    ಗ: "ga",
     ಗಿ: "gi",
     ಗು: "gu",
     ಗುಂ: "gum",
@@ -73,6 +77,7 @@ let kannada_to_english = {
     ತೊ: "tho",
     ತೊಂ: "thom",
     ದಿ: "di",
+    ದಿಂ: "dim",
     ಧಿ: "dhi",
     ಧಿಂ: "dhim",
     ಧುಂ: "dhum",
@@ -82,6 +87,7 @@ let kannada_to_english = {
     ಮಿ: "mi",
     ಣ: "Na",
     ಣು: "Nu",
+    ಳ: "La",
     ಳಾಂ: "Lam",
     ",": ",",
     ";": ";",
@@ -89,6 +95,7 @@ let kannada_to_english = {
 let akshara_list = Object.keys(Aksharas).sort((a, b) => {
     return b.length - a.length;
 });
+
 function get_aksharas_count(text) {
     let i = 0;
     let count = 0;
@@ -110,29 +117,6 @@ function get_aksharas_count(text) {
     return count;
 }
 
-function get_tokens(text) {
-    let tokens = [];
-
-    let buff = "";
-    for (let idx = 0; idx < text.length; idx++) {
-        if (tokenChars.includes(text[idx])) {
-            if (buff) {
-                tokens.push(buff);
-            }
-            tokens.push(text[idx]);
-            buff = "";
-
-            continue;
-        } else {
-            buff += text[idx];
-        }
-    }
-    if (buff) {
-        tokens.push(buff);
-    }
-    return tokens;
-}
-
 function lint(text) {
     text = text.replaceAll("\r\n", "\n") + "\n";
     return text;
@@ -151,35 +135,6 @@ function add_phrase_to_container(token, i, container, classes) {
 
     char.id = `char-${i}`;
     container.appendChild(char);
-}
-
-let alignment = {};
-
-function add_alignment_classes(line) {
-    if (
-        line.innerText.indexOf("[R]") >= 0 ||
-        line.innerText.indexOf("[C]") >= 0
-    ) {
-        alignment = {};
-        groups = line.childNodes;
-        for (let i = 0; i < groups.length; i++) {
-            if (groups[i].innerText.trim() === "[L]") {
-                alignment[i] = "text-align-left";
-            } else if (groups[i].innerText.trim() === "[R]") {
-                alignment[i] = "text-align-right";
-            } else if (groups[i].innerText.trim() === "[C]") {
-                alignment[i] = "text-align-center";
-            }
-        }
-    }
-
-    console.log("alignment:", alignment);
-    for (const [idx, _class] of Object.entries(alignment)) {
-        if (!line.childNodes[idx]) {
-            break;
-        }
-        line.childNodes[idx].classList.add(_class);
-    }
 }
 
 function _process_char_group(tokens, idx, line) {
@@ -312,6 +267,185 @@ function _process_char_group(tokens, idx, line) {
     }
 }
 
+function _process_line(tokens, idx, line) {
+    while (idx < tokens.length) {
+        if (tokens[idx] === Tokens.newLine) {
+            return idx;
+        } else if (
+            tokens[idx] === Tokens.dollar &&
+            tokens[idx + 1] &&
+            tokens[idx + 1] === Tokens.hash
+        ) {
+            add_phrase_to_container(tokens[idx], idx, line, [
+                "chapter-title-marker",
+            ]);
+            add_phrase_to_container(tokens[idx + 1], idx + 1, line, [
+                "chapter-title-marker",
+            ]);
+            line.classList.add("h1");
+            idx += 2;
+        } else if (
+            tokens[idx] === Tokens.hash &&
+            tokens[idx + 1] &&
+            tokens[idx + 1] === Tokens.hash
+        ) {
+            add_phrase_to_container(tokens[idx], idx, line, ["heading-marker"]);
+            add_phrase_to_container(tokens[idx + 1], idx + 1, line, [
+                "heading-marker",
+            ]);
+            line.classList.add("h2");
+            idx += 2;
+        } else if (
+            tokens[idx] === Tokens.interpunct ||
+            tokens[idx] === Tokens.pipe ||
+            tokens[idx] === Tokens.pilcrow ||
+            tokens[idx] === Tokens.backSlash
+        ) {
+            add_phrase_to_container(tokens[idx], idx, line, ["marker"]);
+            line.classList.add("row");
+            idx += 1;
+        } else {
+            idx = _process_char_group(tokens, idx, line);
+        }
+    }
+}
+
+function check_if_nodes_match(a, b) {
+    if (!b){
+        return false;
+    }
+    if (a.classList.contains("group") && b.classList.contains("group")) {
+        return true;
+    } else if (
+        a.classList.contains("marker") &&
+        b.classList.contains("marker")
+    ) {
+        if (a.innerText === b.innerText) {
+            return true;
+        }
+        if (
+            a.innerText === Tokens.backSlash ||
+            b.innerText === Tokens.backSlash
+        ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+let alignment = {};
+
+function add_alignment_classes(line) {
+    if (
+        line.innerText.indexOf("[L]") >= 0 ||
+        line.innerText.indexOf("[R]") >= 0 ||
+        line.innerText.indexOf("[C]") >= 0
+    ) {
+        alignment = {};
+        groups = line.childNodes;
+        for (let i = 0; i < groups.length; i++) {
+            if (groups[i].innerText.trim() === "[L]") {
+                alignment[i] = "text-align-left";
+            } else if (groups[i].innerText.trim() === "[R]") {
+                alignment[i] = "text-align-right";
+            } else if (groups[i].innerText.trim() === "[C]") {
+                alignment[i] = "text-align-center";
+            }
+        }
+    }
+
+    for (const [idx, _class] of Object.entries(alignment)) {
+        if (!line.childNodes[idx]) {
+            break;
+        }
+        line.childNodes[idx].classList.add(_class);
+    }
+}
+
+function format_table(table) {
+    let max_cols = 0;
+    let max_row = 0;
+
+    let rows = table.querySelectorAll(".row");
+    let starts = [];
+    let spans = [];
+    rows.forEach((row, idx) => {
+        let _starts = [];
+        let _spans = [];
+        row.childNodes.forEach((node, i) => {
+            _starts.push(i);
+            _spans.push(1);
+        });
+        if (max_cols < row.childNodes.length) {
+            max_cols = row.childNodes.length;
+            max_row = idx;
+        }
+        starts.push(_starts);
+        spans.push(_spans);
+    });
+
+    for (let i = 0; i < rows.length; i++) {
+        if (i === max_row) {
+            continue;
+        }
+
+        let ref = 0;
+        for (let j = 0; j < starts[i].length; j++) {
+            if (
+                check_if_nodes_match(
+                    rows[i].childNodes[j],
+                    rows[max_row].childNodes[ref]
+                )
+            ) {
+            } else {
+                let match = false;
+                while (ref < max_cols) {
+                    if (!rows[max_row].childNodes[ref]) {
+                        break;
+                    }
+                    if (
+                        check_if_nodes_match(
+                            rows[i].childNodes[j],
+                            rows[max_row].childNodes[ref]
+                        )
+                    ) {
+                        match = true;
+                        break;
+                    }
+                    ref += 1;
+                }
+
+                if (match) {
+                    if (
+                        rows[i].childNodes[j - 1] &&
+                        rows[i].childNodes[j - 1].classList.contains("group")
+                    ) {
+                        spans[i][j - 1] = ref - starts[i][j - 1];
+                    }
+                    let offset = 0;
+                    for (let k = j; k < starts[i].length; k++) {
+                        starts[i][k] = ref + offset;
+                        offset++;
+                    }
+                }
+            }
+            ref += 1;
+        }
+    }
+
+    for (let i = 0; i < rows.length; i++) {
+        for (let j = 0; j < starts[i].length; j++) {
+            rows[i].childNodes[j].style.gridColumn = `${
+                starts[i][j] + 1
+            } / span ${spans[i][j]}`;
+            rows[i].childNodes[j].style.gridRow = i + 1;
+        }
+    }
+
+    table.style.gridTemplateColumns = `repeat(${max_cols},auto)`;
+}
+
+
 function parse(text) {
     console.log("INPUT:", JSON.stringify(text));
 
@@ -321,77 +455,56 @@ function parse(text) {
     let i = 0;
     let lines = [];
     let line = document.createElement("div");
-    let new_line = true;
-
-    let group = document.createElement("span");
-    group.classList.add("group");
+    let table = document.createElement("div");
+    table.classList.add("table");
 
     while (true) {
         if (i >= tokens.length) {
-            if (line.classList.contains("row")) {
-                add_alignment_classes(line);
+            if (table.childNodes.length > 0) {
+                format_table(table);
+                lines.push(table);
+                table = document.createElement("div");
+                table.classList.add("table");
             }
-            lines.push(line);
             break;
         }
-
         if (tokens[i] === Tokens.newLine) {
-            if (line.childNodes.length > 0) {
-                if (line.classList.contains("row")) {
-                    add_alignment_classes(line);
-                }
-                lines.push(line);
-            }
             if (tokens[i + 1] && tokens[i + 1] == Tokens.newLine) {
-                alignment = {};
+                if (table.childNodes.length > 0) {
+                    format_table(table);
+                    lines.push(table);
+                    table = document.createElement("div");
+                    table.classList.add("table");
+                }
+
                 line = document.createElement("div");
                 line.innerHTML = "<br>";
 
                 line.id = `char-${i + 1}`;
                 line.classList.add("empty-line");
+                console.log("empty line", line);
                 lines.push(line);
             }
+            i += 1;
             line = document.createElement("div");
-            i += 1;
-            new_line = true;
             continue;
-        } else if (
-            new_line &&
-            tokens[i] == Tokens.dollar &&
-            tokens[i + 1] &&
-            tokens[i + 1] == Tokens.hash
-        ) {
-            add_phrase_to_container(tokens[i], i, line, [
-                "chapter-title-marker",
-            ]);
-            add_phrase_to_container(tokens[i + 1], i, line, [
-                "chapter-title-marker",
-            ]);
-            line.classList.add("h1");
-            i += 2;
-        } else if (
-            new_line &&
-            tokens[i] == Tokens.hash &&
-            tokens[i + 1] &&
-            tokens[i + 1] == Tokens.hash
-        ) {
-            add_phrase_to_container(tokens[i], i, line, ["heading-marker"]);
-            add_phrase_to_container(tokens[i + 1], i, line, ["heading-marker"]);
-            line.classList.add("h2");
-            i += 2;
-        } else if (
-            tokens[i] == Tokens.interpunct ||
-            tokens[i] === Tokens.pipe ||
-            tokens[i] === Tokens.backSlash ||
-            tokens[i] === Tokens.pilcrow
-        ) {
-            add_phrase_to_container(tokens[i], i, line, ["marker"]);
-            line.classList.add("row");
-            i += 1;
         } else {
-            i = _process_char_group(tokens, i, line);
+            i = _process_line(tokens, i, line);
+            if (line.classList.contains("row")) {
+                add_alignment_classes(line);
+                table.appendChild(line);
+                table.style.gridTemplateColumns = `repeat(${line.childNodes.length},auto)`;
+            } else {
+                if (table.childNodes.length > 0) {
+                    format_table(table);
+                    lines.push(table);
+                    table = document.createElement("div");
+                    table.classList.add("table");
+                }
+                lines.push(line);
+                line = document.createElement("div");
+            }
         }
-        new_line = false;
     }
     return lines;
 }

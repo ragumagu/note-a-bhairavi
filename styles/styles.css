@@ -75,15 +75,16 @@ main {
     font-weight: 700;
 }
 
+.table {
+    display: grid;
+    max-width: fit-content;
+    align-items: end;
+}
+
 .row {
-    display: table-row;
+    display: contents;
 }
-.row > .marker,
-.row > .separator,
-.row > .group,
-.row > .phrase {
-    display: table-cell;
-}
+
 
 .row > * {
     white-space: nowrap;

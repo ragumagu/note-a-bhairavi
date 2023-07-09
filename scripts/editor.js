@@ -87,14 +87,22 @@ function render_text(text, container) {
         if (!row.lastChild || row.classList.contains("empty-line")) {
             return;
         }
-        let idx = parseInt(row.lastChild.id.replace("char-", "")) + 1;
+
+        let idx =
+            parseInt(
+                row.querySelector(".letter:last-child").id.replace("char-", "")
+            ) + 1;
         add_phrase_to_container(nbsp, "extra-" + idx, row, []);
         row.onclick = add_separator;
     });
+
+    container.querySelectorAll(".letter").forEach((letter) => {
+        letter.onclick = add_separator;
+    });
+
     container.querySelectorAll(".marker").forEach((marker) => {
         marker.onclick = remove_marker;
     });
-
 }
 
 function place_cursor() {
@@ -160,9 +168,8 @@ function add_text(e) {
 }
 
 let aksharas_table = document.getElementById("aksharas_table");
-if (aksharas_table){
-    aksharas_table.querySelectorAll("button")
-    .forEach((button) => {
+if (aksharas_table) {
+    aksharas_table.querySelectorAll("button").forEach((button) => {
         button.onclick = add_text;
     });
 }
