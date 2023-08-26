@@ -1,35 +1,23 @@
-$# Welcome to the Notation app
+# Welcome to the Notation app
 
 This is an editor with which you can typeset Carnatic music.
 
 The pane on the left is the editor.
-You can place the cursor anywhere in the editor and click on any cell in the table below, to add the respective text to the editor.
 
 The pane on the right is the preview.
 You can edit the text in the editor pane (on the left) and preview it (on the right).
 
-Add thom here: 
-
-1. Place the cursor in the editor on the left, at the end of the previous line.
-2. Click on thom in the table below.
-
-It should appear in the editor, and also in the preview.
-
-Feel free to place the cursor anywhere in the editor and click on other cells to add more text.
-
 Don't worry about changing the contents of this document: you can simply refresh the page and the contents will be reset.
 
-You are not restricted to the text from the table below. It is just a convenience for typing konnakol syllables. You can type any text and the features of the editor will work.
+# Chapters
 
-$# Chapters
-
-Make a chapter title by adding $# at the beginning of a line.
+Make a chapter title by adding # at the beginning of a line.
 You can use a chapter title to mark a new chapter or a new piece.
 
 Make me a chapter title.
 
 1. Place the cursor at the beginning of the previous line.
-2. Type $# to make a chapter title.
+2. Type # and a space to make a chapter title.
 
 Make a heading by adding ## at the beginning of a line.
 You can use headings to mark sections in a chapter/piece.
@@ -37,7 +25,7 @@ You can use headings to mark sections in a chapter/piece.
 Make me a heading.
 
 1. Place the cursor at the beginning of the previous line.
-2. Type ## to make the heading.
+2. Type ## and a space to make the heading.
 
 $# More about this editor:
 
@@ -48,24 +36,25 @@ The output is a render which looks better than the preview.
 
 Click on download in the top navbar to download the rendered version of this document.
 
-Notice that the chapter title and heading markers are missing from the final output. 
-The heading markers instruct the engine to make the line a heading. There are many such symbols and all such instructional symbols will be hidden in the final rendering, leaving only the main content to be read. This reduces clutter. 
+The heading markers instruct the engine to make the line a heading. 
+There are many such symbols and all such instructional symbols will be hidden in the final rendering, leaving only the main content to be read. This reduces clutter. 
 
 The rendered version also has a table of contents, which is automatically generated, and helps you navigate through the document.
 
-$# Aligning content
+# Aligning content
 
 You can align content using the bar | and pilcrow ⁋ symbols.
 
 Observe the difference between the plain text in the editor, and rendered table in the preview. 
 Note how the separators are aligned.
 
-|| ತಕದಿಮಿ ತಕಝಣು ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು ||
-|| ತಕದಿಮಿ ತಕಝಣು (ತ,ದಿ,ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ) |
+|| takadimi takajhaNu takadimi takajhaNu | takadimi takajhaNu | takadimi takajhaNu |
+|| takadimi takajhaNu (ta, di,tAMkiTa digutarikiTataka) |
 
-⁋ (ದಿಗುತರಿಕಿಟತಕ) ಧಿಂ, ⁋
-⁋ (ದಿಗುತರಿಕಿಟತಕ) ಧಿಂ, ⁋
-⁋ (ದಿಗುತರಿಕಿಟತಕ) ⁋
+⁋ (digutarikiTataka) dhim, ⁋
+⁋ (digutarikiTataka) dhim, ⁋
+⁋ (digutarikiTataka) ⁋
+
 
 The bar is a separator used to show syllables in a rhythm cycle.
 The pilcrow is a separator used to show syllables grouped by structure as opposed to syllables grouped by rhythm cycle.
@@ -73,104 +62,70 @@ The pilcrow is a separator used to show syllables grouped by structure as oppose
 If you have varying number of columns, then you can simply add an empty line to indicate start of a new table.
 Try removing the empty line between the | rows and ⁋ rows in the above example and see what happens.
 
-You can insert a pair of pilcrows by typing // (press slash on your keyboard twice)_ .
-
-Try recreating this example:
-
-⁋ ತಕಝಣು ಧಿಂ, ⁋
-⁋ ತಕಝಣು ಧಿಂ, ⁋
-⁋ ತಕಝಣು ⁋
+You can insert a pair of pilcrows by typing // (press slash on your keyboard twice).
 
 1. Place the cursor on the empty line before this line.
-2. Press slash on your keyboard twice. It will add two pilcrows and place the cursor in the middle.
-3. Click on ತಕಝಣು and ಧಿಂ, in the table to add it to the editor.
-4. Copy the content and paste in new lines twice. 
-5. Remove the ಧಿಂ, in the third line by pressing backspace.
+2. Press slash on your keyboard twice. 
+It will add two pilcrows and place the cursor in the middle.
+
+You can switch the language by specifying >Language in a separate line like this:
+
+>Language: kannada
+
+⁋ takajhaNu dhim, ⁋
+⁋ takajhaNu dhim, ⁋
+⁋ takajhaNu ⁋
+
+>Language: off
+
+You can try kannada, telugu, tamil, malayalam and sanskrit. (These have to be
+spelt exactly as specified here).
 
 There is one more separator: the interpunct · : which is a hidden separator - it will be hidden in the render. Compare the following lines with and without the interpunct:
 
-|| ತಕದಿಮಿ ತಕಝಣು ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು ||
-|| (ತಾ;ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ ತ,ದಿ,ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ | ದಿಗುತರಿಕಿಟತಕ ತಾಂಕಿಟ ದಿಗುತರಿ|ಕಿಟತಕ ತ,ಧಿಂ,ಕಿಟ ತ, ಧಿಂ,ನ್ನ) ||
+>Language: kannada
 
-|| ತಕದಿಮಿ ತಕಝಣು ·ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ·ತಕಝಣು | ತಕದಿಮಿ ·ತಕಝಣು ||
-|| (ತಾ;ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ ·ತ,ದಿ,ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ | ದಿಗುತರಿಕಿಟತಕ ·ತಾಂಕಿಟ ದಿಗುತರಿ|ಕಿಟತಕ ತ,ಧಿಂ,·ಕಿಟ ತ, ಧಿಂ,ನ್ನ) ||
+|| takadimi takajhaNu takadimi takajhaNu | takadimi takajhaNu | takadimi takajhaNu ||
+|| (ta,; tAMkiTa digutarikiTataka) (ta,di, tAMkiTa digutarikiTataka)  | (digutarikiTataka tAMkiTa digutari | kiTataka ta, dhim, kiTa ta, dhim, nna) ||
 
+|| takadimi takajhaNu · takadimi takajhaNu | takadimi · takajhaNu | takadimi · takajhaNu ||
+|| (ta,; tAMkiTa digutarikiTataka) · (ta,di, tAMkiTa digutarikiTataka)  | (digutarikiTataka · tAMkiTa digutari | kiTataka ta, dhim, ·kiTa ta, dhim, nna) ||
+
+>Language: off
 
 You can insert an interpunct by pressing tab on your keyboard.
-Try recreating this example:
 
-⁋ · ದಿಗುತರಿಕಿಟತಕ ⁋
-⁋ ತಾಂಕಿಟ · ದಿಗುತರಿಕಿಟತಕ ⁋
-⁋ ತಾಂಕಿಟ · ದಿಗುತರಿಕಿಟತಕ ⁋
-
-1. Place the cursor on the empty line before this line.
-2. Insert two pilcrows by pressing slash twice.
-3. Insert an interpunct by pressing tab.
-4. Click on ದಿಗುತರಿಕಿಟತಕ in the table to add it, and press End, Enter to go to a new line.
-5. Insert two pilcrows and click ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ in the table.
-6. Place the cursor before ದಿಗುತರಿಕಿಟತಕ and press tab to insert an interpunct.
-7. Repeat steps 5 and 6 on a new line.
-
-## Clicking to add separators
-
-When you have a lot of text that you want to align, typing the separators by hand becomes tedious. To make it easier, you can type the content and add separators by clicking letters in the preview.
-
-1. Click on a letter in the preview to add an interpunct.
-2. Ctrl + Click on a letter in the preview to add a bar.
-3. Shift + Click on a letter in the preview to add a pilcrow.
-
-Try recreating this example:
-
-|| ತಕದಿಮಿ ತಕಝಣು ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು | ತಕದಿಮಿ ತಕಝಣು ||
-|| ತಕದಿಮಿ ತಕಝಣು (ತ,ದಿ,ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ)
-
-⁋ · (ದಿಗುತರಿಕಿಟತಕ) ⁋
-⁋ (ತಾಂಕಿಟ · ದಿಗುತರಿಕಿಟತಕ) ⁋
-⁋ (ತಾಂಕಿಟ · ದಿಗುತರಿಕಿಟತಕ) ⁋
-
-1. Place the cursor on the empty line before this line.
-2. Insert ತಕದಿಮಿ ತಕಝಣು 4 times, press Enter 
-2. Insert ತಕದಿಮಿ ತಕಝಣು, type parentheses, and insert ತ,ದಿ,ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ and press Enter twice.
-
-3. Insert parenthesis and ದಿಗುತರಿಕಿಟತಕ and press Enter
-4. Insert parenthesis and ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ in two new lines.
-5. Click on the letters in the preview to add the separators.
-
-If the alignment seems off, check and add spaces to ensure none of the table cells are empty: every cell must have atleast a space.
-
-You can click on a separator to remove it.
 
 ## Aligning columns
 
 The separators work by creating a table, and each separator makes a new column.
 
-You can specify alignment for each column in a table, by specifying [C] and [R] to align center and right respectively. 
+You can specify alignment for each column in a table, by typing >: in a separate line,
+and  specifying l, c, and r to align left, center and right respectively.
 
-|| [L] |[R] | [C] |[R] ||
+>: l·r·c·r
 || ತಕಿಟ |ತಕಿಟ |ತಕಿಟ |ತಕಿಟ ||
 || ((ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ)) |((ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ)) |((ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ)) |((ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ)) ||
 
-The easiest way to do this is to copy the first line of the table, and replace the content by [C] and [R] where ever you want to align center and right.
+
 
 Content is aligned left by default.
 
 The alignment will be applied in the render, and the alignment hints will be hidden.
 
-$# Underlines
+# Underlines
 
-Everything you put within a (pair of parenthesis) is underlined with (a single underline), unless the matching parenthesis is followed by an underscore.
+Everything you put within a (pair of parenthesis) is underlined with (a single underline).
 
 ((This sentence should have two underlines under it));
 
 You can also have (nested parenthesis (like this)) to add a double underline. 
 
-The parenthesis with single/double underlines won't be shown in the render.
 
-Text following an underscore_WillBeShownAsASubScript as long as it does not contain spaces. The underscore will be hidden in the rendering. You can use this to specify varying rhythms.
-
+Text within an underscore_Will Be Shown As A SubScript_.  The subscript will be hidden in the render.
 For example, 
 
-|| (ತಕಿಟ ತಕಿಟ ತಕಿಟ ತಕಿಟ)_3 | (ತಧಿಂ,ಗಿಣತೊಂ)_6 (ತಧಿಂ,ತ(ಕಿಟ)ತೊಂ)_6 ((ತಾಕಿಟತಕ ತೊಂ,ಕಿಟತೊಂ,))_6 (ತಾಕಿಟತಕ ತೊಂ,ಕಿಟತೊಂ,)_12 ||
+|| (ತಕಿಟ ತಕಿಟ ತಕಿಟ ತಕಿಟ)_3_ | (ತಧಿಂ,ಗಿಣತೊಂ)_6_ (ತಧಿಂ,ತ(ಕಿಟ)ತೊಂ)_6_ ((ತಾಕಿಟತಕ ತೊಂ,ಕಿಟತೊಂ,))_6_ (ತಾಕಿಟತಕ ತೊಂ,ಕಿಟತೊಂ,)_12_ ||
 
 $# More sections to come
 
