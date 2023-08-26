@@ -6,8 +6,13 @@
     margin-left: 20px;
     margin-right: 20px;
     overflow-x: scroll;
+
+    break-before: always;
 }
 
+.flip-horizontal {
+    transform: scale(-1, 1);
+}
 .group > .phrase{
     vertical-align: bottom;
 }

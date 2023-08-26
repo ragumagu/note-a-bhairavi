@@ -1,7 +1,6 @@
 function apply_rendering(text, container) {
     var startTime = performance.now();
-    text = lint(text);
-    let nodes = parse(text);
+    let result = parse(text);
     var endTime = performance.now();
     console.log(
         `Parser took ${endTime - startTime} milliseconds to lint and parse ${
@@ -9,11 +8,13 @@ function apply_rendering(text, container) {
         } characters.`
     );
 
+
+    // container.replaceChildren(...result.nodes);
     let pages = [];
     let page = [];
 
-    for (let i = 0; i < nodes.length; i++) {
-        if (nodes[i].classList.contains("h1")) {
+    for (let i = 0; i < result.nodes.length; i++) {
+        if (result.nodes[i].querySelector(".h1")) {
             if (page.length > 0) {
                 let page_section = document.createElement("section");
                 page_section.classList.add("page");
@@ -23,7 +24,7 @@ function apply_rendering(text, container) {
                 page = [];
             }
         }
-        page.push(nodes[i]);
+        page.push(result.nodes[i]);
     }
 
     if (page.length > 0) {
@@ -37,6 +38,26 @@ function apply_rendering(text, container) {
 
     container.replaceChildren(...pages);
 
+    container.querySelectorAll(".hidden").forEach((n)=>{
+        n.style.visibility ='hidden';
+    });
+    container.querySelectorAll(".directive").forEach((n)=>{
+        n.style.display ='none';
+    });
+
+    container.querySelectorAll(".row").forEach((n)=>{
+        let pilcrows = n.querySelectorAll(".pilcrow")
+        if (pilcrows.length>1){
+            let last =pilcrows[pilcrows.length-1];
+            last.classList.add('flip-horizontal');
+        }
+    });
+
+    container.querySelectorAll(".subscript").forEach((subscript) => {
+        subscript.innerText = subscript.innerText.replaceAll("_", "").trim();
+    });
+
+    return;
     document.querySelectorAll(".h1").forEach((h1) => {
         h1.innerText = h1.innerText.replace("$#", "").trim();
     });
@@ -120,6 +141,8 @@ function create_table_of_contents() {
         ids.push(id);
     });
 
+
+    console.log("ids",ids);
     let toc = document.createElement("div");
     let list = document.createElement("ul");
 
@@ -156,6 +179,7 @@ function create_table_of_contents() {
         observer.observe(page);
     });
 }
+
 function render_content() {
     let params = new URL(document.location).searchParams;
     let input = params.get("test");
@@ -174,7 +198,7 @@ function render_content() {
             });
     } else {
         input = document.getElementById("input");
-        if (input.innerHTML) {
+        if (input && input.innerHTML) {
             apply_rendering(input.innerHTML, main);
         }
     }

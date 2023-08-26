@@ -70,31 +70,40 @@ function add_separator(e) {
     editor.focus();
 }
 
-function render_text(text, container) {
+function render_text(text, container, format) {
     var startTime = performance.now();
-    text = lint(text);
+    // text = lint(text);
 
-    let nodes = parse(text);
+    let startPos = editor.selectionStart;
+    let endPos = editor.selectionEnd;
+    console.log("Text before")
+    console.log(text);
+    if (format){
+        text = text.replace(/ +/g, " ");
+        text = text.replace(/ +\n/g, "\n");
+    }
+    console.log("Text after")
+    console.log(text);
+    let result = parse(text);
     var endTime = performance.now();
     console.log(
         `Parser took ${endTime - startTime} milliseconds to lint and parse ${
             text.length
         } characters.`
     );
+
+    preview.replaceChildren(...result.nodes);
+
+    // editor.selectionStart = startPos + result.offset;
+    // editor.selectionEnd = endPos + result.offset;
+    // console.log("GOT OFFSET", result.offset, "updated to", editor.selectionStart);
+    if (format) {
+        console.log("FORMATTING")
+        editor.value = result.text;
+    }
+    return;
+
     container.replaceChildren(...nodes);
-
-    container.querySelectorAll("div").forEach((row) => {
-        if (!row.lastChild || row.classList.contains("empty-line")) {
-            return;
-        }
-
-        let idx =
-            parseInt(
-                row.querySelector(".letter:last-child").id.replace("char-", "")
-            ) + 1;
-        add_phrase_to_container(nbsp, "extra-" + idx, row, []);
-        row.onclick = add_separator;
-    });
 
     container.querySelectorAll(".letter").forEach((letter) => {
         letter.onclick = add_separator;
@@ -135,6 +144,11 @@ function editor_on_keydown(e) {
         _add_text(Tokens.interpunct, e.target);
         render_text(e.target.value, document.querySelector("main"));
         place_cursor();
+    } else if (e.ctrlKey && e.shiftKey && e.key === "F") {
+        console.log("GOT CTRL_ALT_F");
+        format = true;
+        render_text(e.target.value, document.querySelector("main"), format);
+        e.preventDefault();
     }
 }
 
@@ -156,7 +170,12 @@ function editor_on_input(e) {
 }
 
 function editor_on_keyup(e) {
-    render_text(e.target.value, document.querySelector("main"));
+    let format = false;
+    if (e.ctrlKey && e.shiftKey && e.key === "F") {
+        console.log("GOT CTRL_ALT_F");
+        format = true;
+    }
+    render_text(e.target.value, document.querySelector("main"), format);
     place_cursor();
 }
 

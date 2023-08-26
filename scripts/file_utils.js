@@ -55,6 +55,12 @@ async function download_on_click(e) {
         fetch("/carnatic-notation-app/template.html").then((resp) =>
             resp.text()
         ),
+        fetch("/carnatic-notation-app/scripts/cmtranslit/kt.js").then((resp) =>
+            resp.text()
+        ),
+        fetch("/carnatic-notation-app/scripts/cmtranslit/tamil.js").then(
+            (resp) => resp.text()
+        ),
         fetch("/carnatic-notation-app/scripts/render.js").then((resp) =>
             resp.text()
         ),
@@ -69,10 +75,12 @@ async function download_on_click(e) {
         ),
     ]).then((sources) => {
         let template = sources[0];
-        let render_code = sources[1];
-        let parser_code = sources[2];
-        let styles_css = sources[3];
-        let render_css = sources[4];
+        let kannada_transliterator = sources[1];
+        let tamil_transliterator = sources[2];
+        let render_code = sources[3];
+        let parser_code = sources[4];
+        let styles_css = sources[5];
+        let render_css = sources[6];
 
         let match = `<script id="input" type="text/template"></script>`;
         replace_text = `<script id="input" type="text/template">\n${input}\n</script><!-- end of input -->`;
@@ -82,7 +90,7 @@ async function download_on_click(e) {
         match = `<!-- insert scripts here -->`;
         template = template.replace(
             match,
-            match + `\n<script>\n` + parser_code + render_code + `\n</script>\n`
+            match + `\n<script>\n` + kannada_transliterator + tamil_transliterator + parser_code + render_code + `\n</script>\n`
         );
 
         match = `<!-- insert style sheets here-->`;
