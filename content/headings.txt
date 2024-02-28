@@ -1,0 +1,11 @@
+This demo shows you how to make headings.
+
+# Make me a heading
+Make me a heading
+
+Add a # and a space to make the previous line a heading.
+
+## Make me a sub-heading
+Make me a sub-heading
+
+Add # twice and a space to make the previous line a sub-heading.

@@ -92,13 +92,18 @@ function get_parts(text) {
                 underline = 0;
                 i += 2;
                 continue;
-            } else {
-                part += text[i];
-                parts.push(part);
-                underlines.push(underline);
-                part = "";
-                underline -= 1;
             }
+            else if (text[i + 1] && text[i + 1] === Tokens.underscore){
+                // Don't underline
+                underline = 0;
+            }
+
+            part += text[i];
+            parts.push(part);
+            underlines.push(underline);
+            part = "";
+            underline -= 1;
+
         } else if (text[i] === Tokens.underscore) {
             if (underline === "subscript") {
                 part += text[i];

@@ -5,7 +5,7 @@ This is an editor with which you can typeset Carnatic music.
 The pane on the left is the editor.
 
 The pane on the right is the preview.
-You can edit the text in the editor pane (on the left) and preview it (on the right).
+You can edit the text in the editor pane (on the left)__ and preview it (on the right)__.
 
 Don't worry about changing the contents of this document: you can simply refresh the page and the contents will be reset.
 
@@ -27,7 +27,7 @@ Make me a heading.
 1. Place the cursor at the beginning of the previous line.
 2. Type ## and a space to make the heading.
 
-$# More about this editor:
+# More about this editor:
 
 This is a WYSIWYM editor: what you see is what you mean editor.
 
@@ -62,7 +62,7 @@ The pilcrow is a separator used to show syllables grouped by structure as oppose
 If you have varying number of columns, then you can simply add an empty line to indicate start of a new table.
 Try removing the empty line between the | rows and ⁋ rows in the above example and see what happens.
 
-You can insert a pair of pilcrows by typing // (press slash on your keyboard twice).
+You can insert a pair of pilcrows by typing // (press slash on your keyboard twice)__.
 
 1. Place the cursor on the empty line before this line.
 2. Press slash on your keyboard twice. 
@@ -79,7 +79,7 @@ You can switch the language by specifying >Language in a separate line like this
 >Language: off
 
 You can try kannada, telugu, tamil, malayalam and sanskrit. (These have to be
-spelt exactly as specified here).
+spelt exactly as specified here)__.
 
 There is one more separator: the interpunct · : which is a hidden separator - it will be hidden in the render. Compare the following lines with and without the interpunct:
 
@@ -108,7 +108,6 @@ and  specifying l, c, and r to align left, center and right respectively.
 || ((ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ)) |((ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ)) |((ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ)) |((ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ)) ||
 
 
-
 Content is aligned left by default.
 
 The alignment will be applied in the render, and the alignment hints will be hidden.
@@ -121,11 +120,16 @@ Everything you put within a (pair of parenthesis) is underlined with (a single u
 
 You can also have (nested parenthesis (like this)) to add a double underline. 
 
+You can escape underlining by putting two underscores after the parens, 
+(like this)__.
+
+# Subscripts and Superscripts
 
 Text within an underscore_Will Be Shown As A SubScript_.  The subscript will be hidden in the render.
 For example, 
 
 || (ತಕಿಟ ತಕಿಟ ತಕಿಟ ತಕಿಟ)_3_ | (ತಧಿಂ,ಗಿಣತೊಂ)_6_ (ತಧಿಂ,ತ(ಕಿಟ)ತೊಂ)_6_ ((ತಾಕಿಟತಕ ತೊಂ,ಕಿಟತೊಂ,))_6_ (ತಾಕಿಟತಕ ತೊಂ,ಕಿಟತೊಂ,)_12_ ||
 
-$# More sections to come
+Superscripts are also ^supported^ similarly.
 
+# More sections to come

@@ -1,0 +1,12 @@
+# Making subscripts and superscripts.
+
+All content within two underscores will be displayed
+as a subscript.
+
+For example, _this_.
+
+Similarly, all content within two carets will be displayed
+as a superscript.
+For example, ^this^.
+
+The underscores and carets will be hidden in the output rendering.

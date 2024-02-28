@@ -1,0 +1,14 @@
+|| [L] ·[R] | [C] ·[R] ||
+|| ತಕಿಟ ·ತಕಿಟ ·ತಕಿಟ ·ತಕಿಟ ||
+|| ((ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ)) ·((ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ)) ·((ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ)) ·((ತಾಂಕಿಟ ದಿಗುತರಿಕಿಟತಕ)) ||
+
+
+|| This is to be a · table. ||
+|| See? · The interpunct makes a column. ||
+
+Some more placeholder.
+1. || This is to be a · table. ||
+23. || See? · The interpunct makes a column. ||
+3. || See? · The interpunct makes a column. ||
+
+This is some more text.

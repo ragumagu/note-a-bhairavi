@@ -1,0 +1,10 @@
+# Underlines
+
+Everything you put within a (pair of parenthesis) is underlined with (a single underline).
+
+((This sentence should have two underlines under it)).
+
+You can also have (nested parenthesis (like this)) to add a double underline. 
+
+You can escape underlining by putting two underscores after the parens, 
+(like this)__.
