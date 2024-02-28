@@ -53,6 +53,10 @@ function apply_rendering(text, container) {
         }
     });
 
+    container.querySelectorAll(".superscript").forEach((subscript) => {
+        subscript.innerText = subscript.innerText.replaceAll("^", "").trim();
+    });
+
     container.querySelectorAll(".subscript").forEach((subscript) => {
         subscript.innerText = subscript.innerText.replaceAll("_", "").trim();
     });

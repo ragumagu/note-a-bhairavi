@@ -27,6 +27,7 @@ const Tokens = {
     hash: "#",
     newLine: "\n",
     underscore: "_",
+    caret: "^",
     leftBracket: "[",
     rightBracket: "]",
     leftParen: "(",
@@ -115,6 +116,23 @@ function get_parts(text) {
                 part += text[i];
                 underline = "subscript";
             }
+        } else if (text[i] === Tokens.caret) {
+            if (underline === "superscript") {
+                part += text[i];
+
+                parts.push(part);
+                underlines.push(underline);
+                part = "";
+                underline = 0;
+            } else {
+                if (part) {
+                    parts.push(part);
+                    underlines.push(underline);
+                    part = "";
+                }
+                part += text[i];
+                underline = "superscript";
+            }
         } else {
             part += text[i];
         }
@@ -169,6 +187,8 @@ class TableCell {
                         span.classList.add("du");
                     } else if (res.underlines[i] === "subscript") {
                         span.classList.add("subscript");
+                    } else if (res.underlines[i] === "superscript") {
+                        span.classList.add("superscript");
                     }
                     cell.appendChild(span);
                 }
