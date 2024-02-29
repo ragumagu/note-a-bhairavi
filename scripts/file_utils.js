@@ -52,25 +52,25 @@ async function download_on_click(e) {
     localStorage.setItem("input_string", editor.value);
     let input = localStorage.getItem("input_string");
     Promise.all([
-        fetch("/carnatic-notation-app/template.html").then((resp) =>
+        fetch("/note-a-bhairavi/template.html").then((resp) =>
             resp.text()
         ),
-        fetch("/carnatic-notation-app/scripts/cmtranslit/kt.js").then((resp) =>
+        fetch("/note-a-bhairavi/scripts/cmtranslit/kt.js").then((resp) =>
             resp.text()
         ),
-        fetch("/carnatic-notation-app/scripts/cmtranslit/tamil.js").then(
+        fetch("/note-a-bhairavi/scripts/cmtranslit/tamil.js").then(
             (resp) => resp.text()
         ),
-        fetch("/carnatic-notation-app/scripts/render.js").then((resp) =>
+        fetch("/note-a-bhairavi/scripts/render.js").then((resp) =>
             resp.text()
         ),
-        fetch("/carnatic-notation-app/scripts/parser.js").then((resp) =>
+        fetch("/note-a-bhairavi/scripts/parser.js").then((resp) =>
             resp.text()
         ),
-        fetch("/carnatic-notation-app/styles/styles.css").then((resp) =>
+        fetch("/note-a-bhairavi/styles/styles.css").then((resp) =>
             resp.text()
         ),
-        fetch("/carnatic-notation-app/styles/render.css").then((resp) =>
+        fetch("/note-a-bhairavi/styles/render.css").then((resp) =>
             resp.text()
         ),
     ]).then((sources) => {

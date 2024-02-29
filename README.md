@@ -1,19 +1,14 @@
-# Carnatic Notation app
-Use this app to create carnatic music notation.
+# Note-a-bhairavi
 
-## This is work in progress
+Make high-quality Carnatic music notation, with a focus on konnakol.
 
-This app initially focuses on konnakol / mridangam / kanjira / ghatam / morsing notation.
-
-[Click here](https://ragumagu.github.io/carnatic-notation-app/notation_app.html) to open the app.
-
-This application lets you type in English, and generate notation in English, Kannada, Tamil, Telugu, Malayalam and Sanskrit. The transliteration feature is based on the work of Ramadorai Arunkumar (I hope this is correct) who has developed a [Carnatic Music Typesetter](http://arunk.freepgs.com/wordpress/cm-typesetter/about/) and [Unified Transliteration Scheme for Carnatic Music Compositions](http://arunk.freepgs.com/cmtranslit/cmtranslit_scheme.html).
+[Click here](https://ragumagu.dev/note-a-bhairavi/notation_app.html) to open the app.
 
 ## Examples:
 
-In music notation, we have to align notes and syllables.
+In music notation, we have to align notes and syllables, laid out in a grid separated by | or ||.
 
-However, letters in proportional fonts cannot be aligned with spaces only, so you need a grid to align them.
+However, in languages like Kannada, not all letters have the same width and letters cannot be aligned with spaces only, so you need a grid to align them.
 
 |Without alignment | With alignment |
 | --- | --- |
@@ -36,6 +31,8 @@ With my app, you can get this using a simple input scheme:
 With rhythmic notation, sometimes, it is useful to see
 notes laid out in groups, instead of a grid.
 
+To distinguish between a grid of notes and a grouping of notes, I use a pilcrow - ⁋.
+
 |Without grouping | With grouping |
 | --- | --- |
 | <img src="images/alignment-without-sample.png" width=360> | <img src="images/alignment-sample.png" width=360> | 
@@ -53,16 +50,14 @@ You can do this with:
     ⁋ ·tadigiNatom ·ta ;; ^5^ ⁋
     ⁋ ·tadigiNatom ·  ⁋ 
 
-Usually notes are laid out in grids separated by | or ||.
-To distinguish between a grid of notes and a grouping of notes, I use
-a ⁋.
 
 Notice how you can type in English and get output text in multiple
 languages quite easily. 
 
 ## Tutorial:
 
-[Click here](https://ragumagu.github.io/carnatic-notation-app/notation_app.html?content=tutorial) to go to the tutorial.
+
+[Click here](https://ragumagu.dev/note-a-bhairavi/notation_app.html?content=tutorial) to go to the tutorial.
 
 ## Running locally:
 To run this project locally, clone the project, and run with any http server;
@@ -70,5 +65,9 @@ for example:
 
     mkdir carnatic-notation
     cd carnatic-notation
-    git clone https://github.com/ragumagu/carnatic-notation-app.git 
+    git clone https://github.com/ragumagu/note-a-bhairavi.git
     python -m http.server
+
+## This is work in progress
+
+This application lets you type in English, and generate notation in English, Kannada, Tamil, Telugu, Malayalam and Sanskrit. The transliteration feature is based on the work of Ramadorai Arunkumar (I hope this is correct) who has developed a [Carnatic Music Typesetter](http://arunk.freepgs.com/wordpress/cm-typesetter/about/) and [Unified Transliteration Scheme for Carnatic Music Compositions](http://arunk.freepgs.com/cmtranslit/cmtranslit_scheme.html).

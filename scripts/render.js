@@ -196,7 +196,7 @@ function render_content() {
     let input = params.get("test");
     let main = document.querySelector("main");
     if (input) {
-        fetch("/carnatic-notation-app/tests/" + input)
+        fetch("/note-a-bhairavi/content/" + input)
             .then((response) => response.text())
             .then((text) => {
                 return text;

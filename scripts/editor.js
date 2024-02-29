@@ -59,7 +59,7 @@ let params = new URL(document.location).searchParams;
 let content = params.get("content");
 if (content) {
     content = content.replace(".txt", "");
-    let url = `/carnatic-notation-app/content/${content}.txt`;
+    let url = `/note-a-bhairavi/content/${content}.txt`;
     fetch(url)
         .then((response) => response.text())
         .then((input) => {

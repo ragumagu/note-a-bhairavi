@@ -35,10 +35,10 @@
 
         <link
             rel="stylesheet"
-            href="/carnatic-notation-app/styles/styles.css"
+            href="/note-a-bhairavi/styles/styles.css"
         />
-        <link rel="stylesheet" href="/carnatic-notation-app/styles/render.css" />
-        <link rel="stylesheet" href="/carnatic-notation-app/styles/editor.css" />
+        <link rel="stylesheet" href="/note-a-bhairavi/styles/render.css" />
+        <link rel="stylesheet" href="/note-a-bhairavi/styles/editor.css" />
     </head>
 
     <body>
@@ -54,7 +54,7 @@
             // To update this list, run
             // > python
             // >>> from pathlib import Path
-            // >>> [x.name for x in Path("./carnatic-notation-app/tests/").iterdir()]
+            // >>> [x.name for x in Path("./note-a-bhairavi/tests/").iterdir()]
             var tests = [
                 "align_test.txt",
                 "headings.txt",
@@ -80,7 +80,7 @@
                 let render_td = document.createElement("td");
 
                 let pre = document.createElement("pre");
-                fetch("/carnatic-notation-app/content/" + tests[i])
+                fetch("/note-a-bhairavi/content/" + tests[i])
                     .then((response) => response.text())
                     .then((text) => {
                         return text;
@@ -106,7 +106,7 @@
                     content: tests[i],
                 };
                 params = new URLSearchParams(params).toString();
-                anchor.href = "/carnatic-notation-app/notation_app.html?" + params;
+                anchor.href = "/note-a-bhairavi/notation_app.html?" + params;
                 anchor.innerText = "Click to view output";
                 td = document.createElement("td");
                 td.appendChild(anchor);
