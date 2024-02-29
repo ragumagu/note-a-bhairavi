@@ -20,6 +20,7 @@ var Translators = {
 
 const Tokens = {
     pipe: "|",
+    double_pipe: "||",
     colon: ":",
     slash: "/",
     backSlash: "\\",
@@ -42,13 +43,21 @@ const token_list = Object.entries(Tokens).map(([k, v]) => {
 });
 
 const nbsp = String.fromCharCode(160);
-const visible_markers = [Tokens.pipe.repeat(2), Tokens.pipe, Tokens.pilcrow];
+const visible_markers = [Tokens.double_pipe, Tokens.pipe, Tokens.pilcrow];
 
 const NodeType = {
     text: 100,
     visible_marker: 10,
     hidden_marker: 1,
 };
+
+
+let underline_to_class_map = {
+    1:"su",
+    2:"du",
+    "superscript":"superscript",
+    "subscript":"subscript"
+}
 
 let underline = 0;
 
@@ -193,21 +202,15 @@ class TableCell {
         if (this.nodeType === NodeType.text) {
             let res = get_parts(this.text);
             for (let i = 0; i < res.parts.length; i++) {
-                if (res.underlines[i] === 0) {
+                let underline_value = res.underlines[i];
+
+                if (underline_value === 0) {
                     let text = document.createTextNode(res.parts[i]);
                     cell.appendChild(text);
                 } else {
                     let span = document.createElement("span");
                     span.innerText = res.parts[i];
-                    if (res.underlines[i] === 1) {
-                        span.classList.add("su");
-                    } else if (res.underlines[i] === 2) {
-                        span.classList.add("du");
-                    } else if (res.underlines[i] === "subscript") {
-                        span.classList.add("subscript");
-                    } else if (res.underlines[i] === "superscript") {
-                        span.classList.add("superscript");
-                    }
+                    span.classList.add(underline_to_class_map[underline_value]);
                     cell.appendChild(span);
                 }
             }
@@ -636,6 +639,7 @@ function parse(text, caret_position) {
     underline = 0;
     console.log("INPUT:", JSON.stringify(text));
 
+    text = text.trim();
     text = text.replace(/\r\n/g, "\n");
 
     let lines = get_lines(text);

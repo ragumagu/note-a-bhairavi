@@ -43,6 +43,11 @@ function apply_rendering(text, container) {
     });
 
     container.querySelectorAll(".directive").forEach((n)=>{
+        // Hack which fixes heading alignment when
+        // heading line startswith with >#
+        if (n.nextSibling){
+            n.nextSibling.style.gridColumnStart = 1;
+        }
         n.style.display ='none';
     });
 

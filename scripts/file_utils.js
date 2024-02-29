@@ -83,7 +83,7 @@ async function download_on_click(e) {
         let render_css = sources[6];
 
         let match = `<script id="input" type="text/template"></script>`;
-        replace_text = `<script id="input" type="text/template">\n${input}\n</script><!-- end of input -->`;
+        replace_text = `<script id="input" type="text/template">${input}\n</script><!-- end of input -->`;
 
         template = template.replace(match, replace_text);
 
