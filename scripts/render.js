@@ -8,8 +8,8 @@ function apply_rendering(text, container) {
         } characters.`
     );
 
-
     // container.replaceChildren(...result.nodes);
+
     let pages = [];
     let page = [];
 
@@ -41,6 +41,7 @@ function apply_rendering(text, container) {
     container.querySelectorAll(".hidden").forEach((n)=>{
         n.style.visibility ='hidden';
     });
+
     container.querySelectorAll(".directive").forEach((n)=>{
         n.style.display ='none';
     });
@@ -62,6 +63,7 @@ function apply_rendering(text, container) {
     });
 
     return;
+
     document.querySelectorAll(".h1").forEach((h1) => {
         h1.innerText = h1.innerText.replace("$#", "").trim();
     });

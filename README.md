@@ -12,3 +12,12 @@ This application lets you type in English, and generate notation in English, Kan
 ## Tutorial:
 
 [Click here](https://ragumagu.github.io/carnatic-notation-app/notation_app.html?content=tutorial) to go to the tutorial.
+
+## Running locally:
+To run this project locally, clone the project, and run with any http server;
+for example:
+
+    mkdir carnatic-notation
+    cd carnatic-notation
+    git clone https://github.com/ragumagu/carnatic-notation-app.git 
+    python -m http.server

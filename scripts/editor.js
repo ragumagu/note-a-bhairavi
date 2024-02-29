@@ -1,6 +1,6 @@
 function _add_text(inp_text, textarea) {
-    var startPos = textarea.selectionStart;
-    var endPos = textarea.selectionEnd;
+    let startPos = textarea.selectionStart;
+    let endPos = textarea.selectionEnd;
     textarea.value =
         textarea.value.substring(0, startPos) +
         inp_text +
@@ -9,132 +9,16 @@ function _add_text(inp_text, textarea) {
     textarea.selectionEnd = startPos + inp_text.length;
 }
 
-function remove_marker(e) {
-    console.log("Removing marker");
-    let caret_pos = parseInt(e.target.id.replace("char-", ""));
-
-    editor.value =
-        editor.value.substring(0, caret_pos) +
-        editor.value.substring(caret_pos + 1, editor.value.length);
-    editor.selectionStart = caret_pos;
-    editor.selectionEnd = caret_pos;
-
-    render_text(editor.value, preview);
-    place_cursor();
-    editor.focus();
-}
-
-function add_separator(e) {
-    let caret_pos = null;
-    if (e.target.nodeName === "SPAN") {
-        if (e.target.classList.contains("marker")) {
-            return;
-        }
-        let id = e.target.id;
-        if (id.startsWith("char-extra")) {
-            caret_pos = parseInt(id.replace("char-extra-", ""));
-        } else {
-            caret_pos = parseInt(id.replace("char-", ""));
-        }
-        e.preventDefault();
-    } else {
-        return;
-    }
-
-    console.log("TO add separator at, ", caret_pos);
-
-    editor.selectionStart = caret_pos;
-    editor.selectionEnd = caret_pos;
-
-    var startPos = editor.selectionStart;
-    var endPos = editor.selectionEnd;
-
-    console.log(
-        "between",
-        editor.value.substring(0, startPos),
-        "and",
-        editor.value.substring(endPos, editor.value.length)
-    );
-
-    let separator_to_add = Tokens.interpunct;
-
-    if (window.event.ctrlKey) {
-        separator_to_add = Tokens.pipe;
-    } else if (window.event.shiftKey) {
-        separator_to_add = Tokens.pilcrow;
-    }
-
-    _add_text(separator_to_add, editor);
-    render_text(editor.value, preview);
-    place_cursor();
-    editor.focus();
-}
-
-function render_text(text, container, format) {
-    var startTime = performance.now();
-    // text = lint(text);
-
-    let startPos = editor.selectionStart;
-    let endPos = editor.selectionEnd;
-    console.log("Text before")
-    console.log(text);
-    if (format){
-        text = text.replace(/ +/g, " ");
-        text = text.replace(/ +\n/g, "\n");
-    }
-    console.log("Text after")
-    console.log(text);
+function render_text(text, container) {
+    let startTime = performance.now();
     let result = parse(text);
-    var endTime = performance.now();
+    let endTime = performance.now();
     console.log(
         `Parser took ${endTime - startTime} milliseconds to lint and parse ${
             text.length
         } characters.`
     );
-
-    preview.replaceChildren(...result.nodes);
-
-    // editor.selectionStart = startPos + result.offset;
-    // editor.selectionEnd = endPos + result.offset;
-    // console.log("GOT OFFSET", result.offset, "updated to", editor.selectionStart);
-    if (format) {
-        console.log("FORMATTING")
-        editor.value = result.text;
-    }
-    return;
-
-    container.replaceChildren(...nodes);
-
-    container.querySelectorAll(".letter").forEach((letter) => {
-        letter.onclick = add_separator;
-    });
-
-    container.querySelectorAll(".marker").forEach((marker) => {
-        marker.onclick = remove_marker;
-    });
-}
-
-function place_cursor() {
-    document.querySelectorAll(".caret-left").forEach((n) => {
-        n.classList.remove("caret-left");
-    });
-    document.querySelectorAll(".caret-right").forEach((n) => {
-        n.classList.remove("caret-right");
-    });
-
-    let cursor_pos = editor.selectionEnd;
-    let caret = document.createElement("span");
-    caret.classList.add("caret");
-    caret.innerText = Tokens.pipe;
-    let char = document.querySelector(`#char-${cursor_pos - 1}`);
-    if (char && !char.classList.contains("empty-line")) {
-        char.classList.add("caret-right");
-        return;
-    }
-    char = document.querySelector(`#char-${cursor_pos}`);
-    if (char) {
-        char.classList.add("caret-left");
-    }
+    container.replaceChildren(...result.nodes);
 }
 
 function editor_on_keydown(e) {
@@ -142,14 +26,8 @@ function editor_on_keydown(e) {
         e.preventDefault();
         console.log(e.target);
         _add_text(Tokens.interpunct, e.target);
-        render_text(e.target.value, document.querySelector("main"));
-        place_cursor();
-    } else if (e.ctrlKey && e.shiftKey && e.key === "F") {
-        console.log("GOT CTRL_ALT_F");
-        format = true;
-        render_text(e.target.value, document.querySelector("main"), format);
-        e.preventDefault();
-    }
+        render_text(e.target.value, preview);
+    } 
 }
 
 function editor_on_input(e) {
@@ -170,28 +48,9 @@ function editor_on_input(e) {
 }
 
 function editor_on_keyup(e) {
-    let format = false;
-    if (e.ctrlKey && e.shiftKey && e.key === "F") {
-        console.log("GOT CTRL_ALT_F");
-        format = true;
-    }
-    render_text(e.target.value, document.querySelector("main"), format);
-    place_cursor();
+    render_text(e.target.value, preview);
 }
 
-function add_text(e) {
-    _add_text(e.target.value, editor);
-    render_text(editor.value, preview);
-    place_cursor();
-    editor.focus();
-}
-
-let aksharas_table = document.getElementById("aksharas_table");
-if (aksharas_table) {
-    aksharas_table.querySelectorAll("button").forEach((button) => {
-        button.onclick = add_text;
-    });
-}
 
 let preview = document.querySelector("main");
 let editor = document.querySelector("textarea");
@@ -199,20 +58,19 @@ let editor = document.querySelector("textarea");
 let params = new URL(document.location).searchParams;
 let content = params.get("content");
 if (content) {
+    content = content.replace(".txt", "");
     let url = `/carnatic-notation-app/content/${content}.txt`;
     fetch(url)
         .then((response) => response.text())
         .then((input) => {
             editor.value = input;
             render_text(input, preview);
-            place_cursor();
         });
 }
 
 editor.addEventListener("input", editor_on_input);
 editor.addEventListener("keydown", editor_on_keydown);
 editor.addEventListener("keyup", editor_on_keyup);
-editor.addEventListener("click", place_cursor);
 
 // Scroll sync between editor and preview
 // From https://stackoverflow.com/a/57365748/5940228

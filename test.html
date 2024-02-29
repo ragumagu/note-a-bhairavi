@@ -2,10 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-        <link
-            rel="stylesheet"
-            href="/carnatic-notation-app/styles/styles.css"
-        />
+
         <style>
             :root {
                 --background-color: #fffff8;
@@ -25,64 +22,98 @@
                 border-collapse: collapse;
             }
 
+            .bg {
+                background-color: #fffff8;
+            }
+
             td pre {
                 max-width: 600px;
                 overflow-x: scroll;
                 padding-bottom: 20px;
             }
         </style>
+
+        <link
+            rel="stylesheet"
+            href="/carnatic-notation-app/styles/styles.css"
+        />
+        <link rel="stylesheet" href="/carnatic-notation-app/styles/render.css" />
+        <link rel="stylesheet" href="/carnatic-notation-app/styles/editor.css" />
     </head>
 
     <body>
         <table id="tests"></table>
 
         <script src="scripts/file_utils.js"></script>
+        <script src="scripts/cmtranslit/kt.js"></script>
+        <script src="scripts/cmtranslit/tamil.js"></script>
+        <script src="scripts/parser.js"></script>
+        <script src="scripts/render.js"></script>
 
         <script>
             // To update this list, run
             // > python
             // >>> from pathlib import Path
             // >>> [x.name for x in Path("./carnatic-notation-app/tests/").iterdir()]
-            var tests = ["old_1.txt", "old_2.txt", "tutorial.txt"];
+            var tests = [
+                "align_test.txt",
+                "headings.txt",
+                "kanjira_solo.txt",
+                "subscripts.txt",
+                "tutorial.txt",
+                "underlines.txt",
+            ];
             tests_table = document.getElementById("tests");
 
             for (let i = 0; i < tests.length; i++) {
-                let anchor = document.createElement("a");
-                anchor.target = "_blank";
-                let params = {
-                    test: tests[i],
-                };
-                params = new URLSearchParams(params).toString();
-                console.log("Params", params);
-
-                anchor.href = "/carnatic-notation-app/template.html?" + params;
-                anchor.innerText = "Click to view output";
 
                 let tr = document.createElement("tr");
 
-                let td = document.createElement("td");
+                let source = document.createElement("td");
+                source.classList.add("bg");
+
                 let heading = document.createElement("h2");
                 heading.innerText = tests[i];
-                td.appendChild(heading);
-                tr.appendChild(td);
+                source.appendChild(heading);
+
+                let render = document.createElement("main");
+                let render_td = document.createElement("td");
 
                 let pre = document.createElement("pre");
-                fetch("/carnatic-notation-app/tests/" + tests[i])
+                fetch("/carnatic-notation-app/content/" + tests[i])
                     .then((response) => response.text())
                     .then((text) => {
                         return text;
                     })
                     .then((t) => {
                         pre.innerText = t;
+                        apply_rendering(t, render);
                     })
                     .catch((error) => {
                         console.log(error);
                     });
-                td.appendChild(pre);
 
+                source.appendChild(pre);
+                tr.appendChild(source);
+
+                render_td.appendChild(render);
+                tr.appendChild(render_td);
+
+                let anchor = document.createElement("a");
+                anchor.target = "_blank";
+
+                let params = {
+                    content: tests[i],
+                };
+                params = new URLSearchParams(params).toString();
+                anchor.href = "/carnatic-notation-app/notation_app.html?" + params;
+                anchor.innerText = "Click to view output";
                 td = document.createElement("td");
                 td.appendChild(anchor);
+                td.classList.add("bg");
+
                 tr.appendChild(td);
+
                 tests_table.appendChild(tr);
             }
         </script>

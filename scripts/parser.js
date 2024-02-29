@@ -94,24 +94,15 @@ function get_parts(text) {
 
         } else if (text.startsWith("))__", i)){
             // Edge case.
-            part += text[i];
-            parts.push(part);
-            underlines.push(underline);
+            parts.push(part+")", ")");
+            underlines.push(underline, underline-1);
 
             part = "";
-            parts.push(part);
-            part += text[i+1];
-            parts.push(part);
-            underline -= 1;
-            underlines.push(underline);
-
-            part = "";
-            underline -= 1;
+            underline -= 2;
             i+=4;
             continue;
         } else if (text.startsWith(")__", i)){
-            part += text[i];
-            parts.push(part);
+            parts.push(part+")");
             underlines.push(underline);
             part = "";
             underline -= 1;
@@ -119,25 +110,20 @@ function get_parts(text) {
             continue;
 
         } else if (text.startsWith("))", i)){
-            part += text[i];
-            part += text[i + 1];
-            parts.push(part);
+            parts.push(part+"))");
             underlines.push(underline);
             part = "";
             underline = 0;
             i += 2;
             continue;
         } else if (text[i] === Tokens.rightParen) {
-            part += text[i];
-            parts.push(part);
+            parts.push(part+")");
             underlines.push(underline);
             part = "";
             underline -= 1;
         } else if (text[i] === Tokens.underscore) {
             if (underline === "subscript") {
-                part += text[i];
-
-                parts.push(part);
+                parts.push(part + "_");
                 underlines.push(underline);
                 part = "";
                 underline = 0;
@@ -152,9 +138,7 @@ function get_parts(text) {
             }
         } else if (text[i] === Tokens.caret) {
             if (underline === "superscript") {
-                part += text[i];
-
-                parts.push(part);
+                parts.push(part+"^");
                 underlines.push(underline);
                 part = "";
                 underline = 0;
@@ -651,6 +635,8 @@ function make_tables_with_spaces(lines) {
 function parse(text, caret_position) {
     underline = 0;
     console.log("INPUT:", JSON.stringify(text));
+
+    text = text.replace(/\r\n/g, "\n");
 
     let lines = get_lines(text);
     lines = transliterate(lines);

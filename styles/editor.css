@@ -38,55 +38,6 @@ main {
     padding: 20px;
 }
 
-.caret-left {
-    border-left-width: 1px;
-    border-left-style: solid;
-    animation: blink-left 1s step-start 0s infinite;
-}
-
-@keyframes blink-left {
-    0% {
-        border-left-color: transparent;
-    }
-    50% {
-        border-left-color: black;
-    }
-    100% {
-        border-left-color: transparent;
-    }
-}
-
-.caret-right {
-    border-right-width: 1px;
-    border-right-style: solid;
-    animation: blink-right 1s step-start 0s infinite;
-}
-
-@keyframes blink-right {
-    0% {
-        border-right-color: transparent;
-    }
-    50% {
-        border-right-color: black;
-    }
-    100% {
-        border-right-color: transparent;
-    }
-}
-
-/* .letter,
-.marker {
-    cursor: pointer;
-} */
-
-/* .letter:hover {
-    background-color: lightgreen;
-}
-
-.marker:hover {
-    background-color: red;
-} */
-
 html,
 body {
     height: 100%;
