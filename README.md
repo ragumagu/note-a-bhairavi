@@ -6,7 +6,7 @@ Make high-quality Carnatic music notation, with a focus on konnakol.
 
 ## Examples:
 
-In music notation, we have to align notes and syllables, laid out in a grid separated by | or ||.
+In music notation, we have to align notes and syllables, laid out in a grid separated by \| or \|\|.
 
 However, in languages like Kannada, not all letters have the same width and letters cannot be aligned with spaces only, so you need a grid to align them.
 
