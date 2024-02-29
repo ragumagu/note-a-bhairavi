@@ -17,7 +17,7 @@ However, letters in proportional fonts cannot be aligned with spaces only, so yo
 
 |Without alignment | With alignment |
 | --- | --- |
-| <img src="images/geete-without-alignment.png width=200> | <img src="images/geete.png width=200> | 
+| <img src="images/geete-without-alignment.png" width=360> | <img src="images/geete.png" width=360> | 
 
 
 With my app, you can get this using a simple input scheme:
@@ -38,7 +38,7 @@ notes laid out in groups, instead of a grid.
 
 |Without grouping | With grouping |
 | --- | --- |
-| <img src="images/alignment-without-sample.png width=200> | <img src="images/alignment-sample.png width=200> | 
+| <img src="images/alignment-without-sample.png" width=360> | <img src="images/alignment-sample.png" width=360> | 
 
 You can do this with:
 
