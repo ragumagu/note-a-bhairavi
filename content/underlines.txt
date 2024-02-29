@@ -4,7 +4,13 @@ Everything you put within a (pair of parenthesis) is underlined with (a single u
 
 ((This sentence should have two underlines under it)).
 
-You can also have (nested parenthesis (like this)) to add a double underline. 
+You can have (nested parenthesis (like this)).
 
-You can escape underlining by putting two underscores after the parens, 
-(like this)__.
+You can escape underlining by putting two underscores before and 
+after the parens, __(like this)__.
+
+You can also have (nested parenthesis __(like this)__).
+
+You can also have __(nested parenthesis (like this))__.
+
+You can also have __(nested parenthesis __(like this)__)__.

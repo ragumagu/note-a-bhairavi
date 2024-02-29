@@ -59,10 +59,19 @@ function get_parts(text) {
     let i = 0;
 
     while (i < text.length) {
-        if (
-            text[i] === Tokens.leftParen &&
-            ((text[i + 1] && text[i + 1] === Tokens.leftParen) ||
-                underline === 1)
+        if (text.startsWith("__(", i)){
+            if (part) {
+                parts.push(part);
+                underlines.push(underline);
+                part = "";
+            }
+            part += "(";
+            underline = 0;
+            i += 3;
+            continue;
+        }else if (
+            (text.startsWith("((", i))||
+            (text[i] === Tokens.leftParen && underline === 1)
         ) {
             if (part) {
                 parts.push(part);
@@ -82,28 +91,48 @@ function get_parts(text) {
             }
             part += text[i];
             underline = 1;
-        } else if (text[i] === Tokens.rightParen) {
-            if (text[i + 1] && text[i + 1] === Tokens.rightParen) {
-                part += text[i];
-                part += text[i + 1];
-                parts.push(part);
-                underlines.push(underline);
-                part = "";
-                underline = 0;
-                i += 2;
-                continue;
-            }
-            else if (text[i + 1] && text[i + 1] === Tokens.underscore){
-                // Don't underline
-                underline = 0;
-            }
 
+        } else if (text.startsWith("))__", i)){
+            // Edge case.
+            part += text[i];
+            parts.push(part);
+            underlines.push(underline);
+
+            part = "";
+            parts.push(part);
+            part += text[i+1];
+            parts.push(part);
+            underline -= 1;
+            underlines.push(underline);
+
+            part = "";
+            underline -= 1;
+            i+=4;
+            continue;
+        } else if (text.startsWith(")__", i)){
             part += text[i];
             parts.push(part);
             underlines.push(underline);
             part = "";
             underline -= 1;
+            i+=3;
+            continue;
 
+        } else if (text.startsWith("))", i)){
+            part += text[i];
+            part += text[i + 1];
+            parts.push(part);
+            underlines.push(underline);
+            part = "";
+            underline = 0;
+            i += 2;
+            continue;
+        } else if (text[i] === Tokens.rightParen) {
+            part += text[i];
+            parts.push(part);
+            underlines.push(underline);
+            part = "";
+            underline -= 1;
         } else if (text[i] === Tokens.underscore) {
             if (underline === "subscript") {
                 part += text[i];

@@ -5,7 +5,7 @@ This is an editor with which you can typeset Carnatic music.
 The pane on the left is the editor.
 
 The pane on the right is the preview.
-You can edit the text in the editor pane (on the left)__ and preview it (on the right)__.
+You can edit the text in the editor pane __(on the left)__ and preview it __(on the right)__.
 
 Don't worry about changing the contents of this document: you can simply refresh the page and the contents will be reset.
 
@@ -62,7 +62,7 @@ The pilcrow is a separator used to show syllables grouped by structure as oppose
 If you have varying number of columns, then you can simply add an empty line to indicate start of a new table.
 Try removing the empty line between the | rows and ⁋ rows in the above example and see what happens.
 
-You can insert a pair of pilcrows by typing // (press slash on your keyboard twice)__.
+You can insert a pair of pilcrows by typing // __(press slash on your keyboard twice)__.
 
 1. Place the cursor on the empty line before this line.
 2. Press slash on your keyboard twice. 
@@ -78,7 +78,7 @@ You can switch the language by specifying >Language in a separate line like this
 
 >Language: off
 
-You can try kannada, telugu, tamil, malayalam and sanskrit. (These have to be
+You can try kannada, telugu, tamil, malayalam and sanskrit. __(These have to be
 spelt exactly as specified here)__.
 
 There is one more separator: the interpunct · : which is a hidden separator - it will be hidden in the render. Compare the following lines with and without the interpunct:
@@ -121,7 +121,7 @@ Everything you put within a (pair of parenthesis) is underlined with (a single u
 You can also have (nested parenthesis (like this)) to add a double underline. 
 
 You can escape underlining by putting two underscores after the parens, 
-(like this)__.
+__(like this)__.
 
 # Subscripts and Superscripts
 
