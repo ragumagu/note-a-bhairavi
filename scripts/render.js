@@ -129,14 +129,14 @@ function create_header() {
 
     let label = document.createElement("label");
     label.innerText = "Show syllable counts:";
-    header_right.appendChild(label);
+    // header_right.appendChild(label);
 
     let input = document.createElement("input");
     input.type = "checkbox";
     input.id = "show-counts-checkbox";
     input.onchange = show_or_hide_count_hints_with_range;
 
-    header_right.appendChild(input);
+    // header_right.appendChild(input);
 }
 
 function create_table_of_contents() {
@@ -379,7 +379,7 @@ function change_title_on_scroll(entries) {
                 entry.target.parentNode.id.replace("page-id-", "")
             );
             current_page_in_viewport = new_val;
-            show_or_hide_count_hints_with_range();
+            // show_or_hide_count_hints_with_range();
 
             if (!entry.target.parentNode.classList.contains("toc")) {
                 document.getElementById("current-chapter-title").innerText =
@@ -392,14 +392,14 @@ function change_title_on_scroll(entries) {
         ) {
             // Title is exiting from bottom of viewport
             let new_val =
-                parseInt(entry.target.parentNode.id.replace("page-id-", "")) -
+                parseInt(entry.target.closest(".page").id.replace("page-id-", "")) -
                 1;
             if (new_val < 0) {
                 new_val = 0;
             }
 
             current_page_in_viewport = new_val;
-            show_or_hide_count_hints_with_range();
+            // show_or_hide_count_hints_with_range();
 
             if (!entry.target.parentNode.classList.contains("toc")) {
                 document.getElementById("current-chapter-title").innerText =
