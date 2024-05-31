@@ -383,7 +383,7 @@ function change_title_on_scroll(entries) {
 
             if (!entry.target.parentNode.classList.contains("toc")) {
                 document.getElementById("current-chapter-title").innerText =
-                    entry.target.innerHTML;
+                    entry.target.innerText;
             }
         } else if (
             entry.boundingClientRect.top > 100 &&
@@ -405,7 +405,7 @@ function change_title_on_scroll(entries) {
                 document.getElementById("current-chapter-title").innerText =
                     document.getElementById(
                         "page-id-" + new_val
-                    ).childNodes[0].innerHTML;
+                    ).childNodes[0].innerText;
             }
         }
     });
